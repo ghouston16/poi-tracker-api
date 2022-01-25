@@ -36,13 +36,8 @@ while True:
             TimedSerializer.sleep(5)
             print('Error connecting to Db')
 
-my_pois = [{"title": "title of poi 1", "description": "content of poi 1",
-             "category": "Historic", "lat": "", "long": "", "id": 1,
-            "title": "title of poi 2", "description": "content of poi 2", 
-            "category": "Historic", "lat": "", "long": "", "id": 2 }]
-
 @app.get("/sqlalchemy")
-def test_posts(db: Session = Depends(get_db)):
+def test_pois(db: Session = Depends(get_db)):
     return {"status": "success"}
 
 
