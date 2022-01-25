@@ -5,24 +5,27 @@ from typing import Optional
 
 from pydantic.types import conint
 
-# Post Model
-class PostBase(BaseModel):
+# Poi Model
+class PoiBase(BaseModel):
     title: str
     description: str
+    category: str
     lat: str
     long: str
-    category: str
     published: bool = True
 
-class PostCreate(PostBase):
+class PoiCreate(PoiBase):
     pass
 
 # Response Model
-class Post(PostBase):
+class Poi(PoiBase):
     id: int
     created_at: datetime
+    class Config: 
+        orm_mode = True
 
-
-class PostOut(BaseModel):
-    Post: Post
+class PoiOut(BaseModel):
+    Poi: Poi
+    class Config: 
+        orm_mode = True
 
