@@ -29,17 +29,17 @@ def test_create_poi(client):
 
 # Test for Find By Id
 def test_get_poi_by_id(client):
-    response = client.get("/pois/1")
+    response = client.get("/pois/5")
     print(response.json())
     assert response.status_code == 200
 
 # Test Delete POI 
 def test_delete_poi(client):
-    response = client.delete("/pois/1")
+    response = client.delete("/pois/4")
     assert response.status_code == 204
 
 # Test Update POI
 def test_update_poi(client):
-    poi_data = {"title": "title of poi 3", "description": "content of poi 3", "category": "Historic", "lat": "1.000", "long": "4.000", "id": 1 }
-    response = client.put("/pois/2",json= poi_data)
+    poi_data = {"title": "updated", "description": "content of poi 3", "category": "Historic", "lat": "1.000", "long": "4.000", "id": 1 }
+    response = client.put("/pois/5",json= poi_data)
     assert response.status_code == 201
