@@ -1,4 +1,5 @@
 
+from operator import mod
 from typing import Optional
 from fastapi import Depends, FastAPI, Response, status, HTTPException
 from fastapi.params import Body
@@ -24,7 +25,7 @@ class Poi(BaseModel):
     lat: str
     long: str
     published: bool = True
-    rating: Optional[int] = None
+    
 
 while True:
     try:
@@ -36,20 +37,10 @@ while True:
             TimedSerializer.sleep(5)
             print('Error connecting to Db')
 
-my_pois = [{"title": "title of poi 1", "description": "content of poi 1", "category": "Historic", "lat": "", "long": "", "id": 1,
-            "title": "title of poi 2", "description": "content of poi 2", "category": "Historic", "lat": "", "long": "", "id": 2 }]
-
-
-def find_poi(id):
-    for p in my_pois:
-        if p['id'] == id:
-            return p
-
-
-def find_index_poi(id):
-    for i, p in enumerate(my_pois):
-        if p['id'] == id:
-            return i
+my_pois = [{"title": "title of poi 1", "description": "content of poi 1",
+             "category": "Historic", "lat": "", "long": "", "id": 1,
+            "title": "title of poi 2", "description": "content of poi 2", 
+            "category": "Historic", "lat": "", "long": "", "id": 2 }]
 
 @app.get("/sqlalchemy")
 def test_posts(db: Session = Depends(get_db)):
@@ -62,25 +53,28 @@ def root():
 
 
 @app.get("/pois", status_code=status.HTTP_200_OK)
-def get_pois():
-    cursor.execute("""SELECT * FROM pois""")
-    pois = cursor.fetchall()
+def get_pois(db: Session = Depends(get_db)):
+    # cursor.execute("""SELECT * FROM pois""")
+    # pois = cursor.fetchall()
+    pois = db.query(models.Poi).all()
     return {"data": pois}
 
 
 @app.post("/pois", status_code=status.HTTP_201_CREATED)
-def create_pois(poi: Poi):
-    global id 
-    id +=1
-    cursor.execute("""INSERT INTO pois (title,description,category,lat,long,published,id) values (%s,%s,%s,%s,%s,%s,%s)""",(poi.title,poi.description,poi.category,poi.lat,poi.long,poi.published,id))
-    conn.commit()
+def create_pois(poi: Poi, db: Session = Depends(get_db)):
+    #cursor.execute("""INSERT INTO pois (title,description,category,lat,long,published) values (%s,%s,%s,%s,%s,%s)""",(poi.title,poi.description,poi.category,poi.lat,poi.long,poi.published))
+    new_poi = models.Poi(**poi.dict())
+    db.add(new_poi)
+    db.commit()
     return {"data": "new poi created"}
 
 
 @app.get("/pois/{id}",  status_code=status.HTTP_200_OK)
-def get_poi(id: int):
-    cursor.execute("""SELECT FROM pois WHERE id = %s""", (str(id),) )
-    poi = cursor.fetchone()
+def get_poi(id: int, db: Session = Depends(get_db)):
+    find_poi = db.query(models.Poi).filter(models.Poi.id == id)
+    #cursor.execute("""SELECT FROM pois WHERE id = %s""", (str(id),) )
+    # poi = cursor.fetchone()
+    poi = find_poi.first()
     if not poi:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"poi with id: {id} was not found")
@@ -88,23 +82,25 @@ def get_poi(id: int):
 
 
 @app.delete("/pois/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_poi(id: int):
-    cursor.execute("""DELETE FROM pois WHERE id = %s""", (str(id),) )
-    found_poi = cursor.fetchone()
-    if found_poi == None:
+def delete_poi(id: int, db: Session = Depends(get_db)):
+    find_poi = db.query(models.Poi).filter(models.Poi.id == id)
+    
+    #cursor.execute("""DELETE FROM pois WHERE id = %s""", (str(id),) )
+    if find_poi.first() == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"poi with id: {id} does not exist")
+    find_poi.delete(synchronize_session=False)
+    db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 @app.put("/pois/{id}",status_code=status.HTTP_201_CREATED)
-def update_poi(id: int, poi: Poi):
-    index = find_index_poi(id)
-
-    if index == None:
+def update_poi(id: int, poi: Poi, db: Session = Depends(get_db)):
+    find_poi = db.query(models.Poi).filter(models.Poi.id == id)
+    update_poi = find_poi.first()
+    if update_poi == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"poi with id: {id} does not exist")
 
-    poi_dict = poi.dict()
-    poi_dict['id'] = id
-    my_pois[index] = poi_dict
-    return {"data": poi_dict}
+    find_poi.update(poi.dict(), synchronize_session=False)
+    db.commit()         
+    return {"POI Updated": update_poi}
