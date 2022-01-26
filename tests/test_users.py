@@ -24,7 +24,8 @@ def test_get_user_by_id(client, test_users):
 
 # Test Update POI
 def test_update_user(client, test_users):
-    user_data = {"title": "updated", "description": "content of user 3", "category": "Historic", "lat": "1.000", "long": "4.000", "id": 1 }
+    user_data = {"email": "changed@email.ie", 
+                "password": "secretworld" }
     response = client.put("/users/1",json= user_data)
     assert response.status_code == 201
 
