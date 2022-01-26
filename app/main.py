@@ -128,6 +128,7 @@ def get_user(id: int, db: Session = Depends(get_db)):
                             detail=f"poi with id: {id} was not found")
     return user
 
+
 # Update user
 @app.put("/users/{id}", status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
 def update_user(id: int, updated_user: schemas.UserCreate, db: Session = Depends(get_db)):
@@ -140,14 +141,3 @@ def update_user(id: int, updated_user: schemas.UserCreate, db: Session = Depends
     user_query.update(updated_user.dict(), synchronize_session=False)
     db.commit()
     return user_query.first()
-
-# Delete user - Find by Id and Delete
-@app.delete("/users/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_user(id: int, db: Session = Depends(get_db)):
-    user = db.query(models.User).filter(models.User.id == id)
-    if user.first() == None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"user with id: {id} does not exist")
-    user.delete(synchronize_session=False)
-    db.commit()
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
