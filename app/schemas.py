@@ -29,3 +29,22 @@ class PoiOut(BaseModel):
     class Config: 
         orm_mode = True
 
+## User Models
+
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str
+
+# Response Model - exclude password
+class UserOut(BaseModel):
+    id: int
+    email: EmailStr
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
+
+# User Login class
+class UserLogin(BaseModel):
+    email = EmailStr
+    password = str

@@ -99,3 +99,19 @@ def update_poi(id: int, poi: schemas.PoiCreate, db: Session = Depends(get_db)):
     find_poi.update(poi.dict(), synchronize_session=False)
     db.commit()         
     return update_poi
+
+# User Methods
+
+@app.post("/users", status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
+async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    # TO-DO :hash the password - user.password
+    new_user = models.User(**user.dict())
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return new_user
+
+@app.get("/users",status_code=status.HTTP_200_OK, response_model=List[schemas.UserOut])
+def get_users(db: Session = Depends(get_db)):
+    users = db.query(models.User).all()
+    return users
