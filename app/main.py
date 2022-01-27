@@ -3,7 +3,6 @@ from operator import mod
 from typing import List, Optional
 from fastapi import Depends, FastAPI, Response, status, HTTPException
 from fastapi.params import Body
-from importlib_metadata import re
 from itsdangerous import TimedSerializer
 from pydantic import BaseModel
 from random import randrange
