@@ -1,4 +1,3 @@
-"""
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -9,4 +8,3 @@ def hash(password: str):
 
 def verify(plain_password, hashed_passord):
     return pwd_context.verify(plain_password, hashed_passord)
-    """

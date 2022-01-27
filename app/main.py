@@ -1,3 +1,4 @@
+from enum import auto
 from operator import mod
 from typing import List, Optional
 from fastapi import Depends, FastAPI, Response, status, HTTPException
@@ -9,9 +10,13 @@ from random import randrange
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import time
+from pytest import deprecated_call
 from sqlalchemy.orm import Session
 from . import models, schemas
 from .database import engine, get_db
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 app = FastAPI()
 
@@ -99,6 +104,8 @@ def update_poi(id: int, poi: schemas.PoiCreate, db: Session = Depends(get_db)):
 @app.post("/users", status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
 async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     # TO-DO :hash the password - user.password
+    hashed_pwd = pwd_context.hash(user.password)
+    user.password = hashed_pwd
     new_user = models.User(**user.dict())
     db.add(new_user)
     db.commit()
