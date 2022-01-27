@@ -48,15 +48,12 @@ def root():
 
 @app.get("/pois",status_code=status.HTTP_200_OK, response_model=List[schemas.Poi])
 def get_pois(db: Session = Depends(get_db)):
-    # cursor.execute("""SELECT * FROM pois""")
-    # pois = cursor.fetchall()
     pois = db.query(models.Poi).all()
     return pois
 
 
 @app.post("/pois", status_code=status.HTTP_201_CREATED, response_model=schemas.Poi)
 def create_pois(poi: Poi, db: Session = Depends(get_db)):
-    #cursor.execute("""INSERT INTO pois (title,description,category,lat,long,published) values (%s,%s,%s,%s,%s,%s)""",(poi.title,poi.description,poi.category,poi.lat,poi.long,poi.published))
     new_poi = models.Poi(**poi.dict())
     db.add(new_poi)
     db.commit()
@@ -67,8 +64,6 @@ def create_pois(poi: Poi, db: Session = Depends(get_db)):
 @app.get("/pois/{id}", status_code=status.HTTP_200_OK, response_model=schemas.Poi)
 def get_poi(id: int, db: Session = Depends(get_db)):
     find_poi = db.query(models.Poi).filter(models.Poi.id == id)
-    #cursor.execute("""SELECT FROM pois WHERE id = %s""", (str(id),) )
-    # poi = cursor.fetchone()
     poi = find_poi.first()
     if not poi:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -79,8 +74,6 @@ def get_poi(id: int, db: Session = Depends(get_db)):
 @app.delete("/pois/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_poi(id: int, db: Session = Depends(get_db)):
     find_poi = db.query(models.Poi).filter(models.Poi.id == id)
-    
-    #cursor.execute("""DELETE FROM pois WHERE id = %s""", (str(id),) )
     if find_poi.first() == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"poi with id: {id} does not exist")
@@ -127,7 +120,6 @@ def get_user(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"poi with id: {id} was not found")
     return user
-
 
 # Update user
 @app.put("/users/{id}", status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
