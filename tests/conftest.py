@@ -50,3 +50,10 @@ def test_pois(client):
     test_poi2 = client.post("/pois", json=pois_data[1])
     assert test_poi2.status_code == 201
 
+@pytest.fixture
+def test_users(client):
+    users_data = [{ "email": "test1@api.ie", "password": "secretword"} ,{ "email": "test2@api.ie", "password": "secretword"} ]
+    test_user1 = client.post("/users", json=users_data[0])
+    assert test_user1.status_code == 201
+    test_user2 = client.post("/users", json=users_data[1])
+    assert test_user2.status_code == 201
