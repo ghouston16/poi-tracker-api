@@ -11,9 +11,13 @@ from psycopg2.extras import RealDictCursor
 import time
 from pytest import deprecated_call
 from sqlalchemy.orm import Session
+
+from app.config import settings
 from . import models, schemas
 from .database import engine, get_db
 from passlib.context import CryptContext
+
+from app import database
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -32,7 +36,7 @@ class Poi(BaseModel):
 
 while True:
     try:
-            conn = psycopg2.connect(host='localhost', database='poi_api_db',user='postgres',password='Expires21!!', cursor_factory=RealDictCursor)
+            conn = psycopg2.connect(host=settings.database_hostname, database=settings.database_name,user=settings.database_username,password=settings.database_password, cursor_factory=RealDictCursor)
             cursor = conn.cursor()
             print('DB connection success')
             break
