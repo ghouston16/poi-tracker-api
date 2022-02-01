@@ -37,7 +37,7 @@ while True:
             print('DB connection success')
             break
     except Exception as error: 
-            TimedSerializer.sleep(5)
+            time.sleep(5)
             print('Error connecting to Db')
 
 @app.get("/sqlalchemy")
