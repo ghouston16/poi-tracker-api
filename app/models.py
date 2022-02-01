@@ -11,7 +11,7 @@ class Poi(Base):
     title = Column(String, nullable=False)
     description = Column(String, nullable=False)
     lat = Column(String, nullable=True)
-    long = Column(String, nullable=True)
+    lng = Column(String, nullable=True)
     category =  Column(String, nullable=True)
     published = Column(Boolean, server_default='TRUE', nullable=False)
     created_at = Column(TIMESTAMP(timezone=True),

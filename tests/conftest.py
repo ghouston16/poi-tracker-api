@@ -42,9 +42,9 @@ def client(session): # session param calls session fixture before code
 @pytest.fixture
 def test_pois(client):
     pois_data = [{ "title": "title of poi 1", "description": "content of poi 1",
-             "category": "Historic", "lat": "", "long": "", "id": 1},{
+             "category": "Historic", "lat": "", "lng": "", "id": 1},{
             "title": "title of poi 2", "description": "content of poi 2", 
-            "category": "Historic", "lat": "", "long": "", "id": 2 }]
+            "category": "Historic", "lat": "", "lng": "", "id": 2 }]
     test_poi1 = client.post("/pois", json=pois_data[0])
     assert test_poi1.status_code == 201
     test_poi2 = client.post("/pois", json=pois_data[1])

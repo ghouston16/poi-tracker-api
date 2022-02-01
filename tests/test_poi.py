@@ -11,7 +11,7 @@ def test_get_all_pois(client):
 
 # Test for Creating POI
 def test_create_poi(client):
-    poi_data = {"title": "title of poi 3", "description": "content of poi 3", "category": "Historic", "lat": "1.000", "long": "4.000" }
+    poi_data = {"title": "title of poi 3", "description": "content of poi 3", "category": "Historic", "lat": "1.000", "lng": "4.000" }
     response = client.post("/pois", json=poi_data)
     print(response.json())
     assert response.status_code == 201
@@ -24,7 +24,7 @@ def test_get_poi_by_id(client, test_pois):
 
 # Test Update POI
 def test_update_poi(client, test_pois):
-    poi_data = {"title": "updated", "description": "content of poi 3", "category": "Historic", "lat": "1.000", "long": "4.000", "id": 1 }
+    poi_data = {"title": "updated", "description": "content of poi 3", "category": "Historic", "lat": "1.000", "lng": "4.000", "id": 1 }
     response = client.put("/pois/1",json= poi_data)
     assert response.status_code == 201
 

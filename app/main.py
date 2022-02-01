@@ -26,7 +26,7 @@ class Poi(BaseModel):
     description: str
     category: str
     lat: str
-    long: str
+    lng: str
     published: bool = True
     
 

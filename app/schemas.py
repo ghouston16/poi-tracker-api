@@ -11,7 +11,7 @@ class PoiBase(BaseModel):
     description: str
     category: str
     lat: str
-    long: str
+    lng: str
     published: bool = True
 
 class PoiCreate(PoiBase):
