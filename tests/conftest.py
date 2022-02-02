@@ -19,8 +19,11 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 
 @pytest.fixture()
 def session():
+    # Drop all drops in testing DB
     Base.metadata.drop_all(bind=engine)
+    # Create tables fresh
     Base.metadata.create_all(bind=engine)
+    # Create session
     db = TestingSessionLocal()
     try:
         yield db
@@ -37,7 +40,6 @@ def client(session): # session param calls session fixture before code
             session.close()
     app.dependency_overrides[get_db] = override_get_db
     yield TestClient(app)
-    #Base.metadata.drop_all(bind=engine) # Delete Tables after test
 
 @pytest.fixture
 def test_pois(client):
