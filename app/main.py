@@ -8,7 +8,7 @@ from app.config import settings
 from . import models
 from .database import engine, get_db
 from passlib.context import CryptContext
-from .routers import poi, user
+from .routers import poi, user, authenticate
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -29,6 +29,7 @@ while True:
  # Include Routers
 app.include_router(poi.router)
 app.include_router(user.router)
+app.include_router(authenticate.router)
 
 @app.get("/sqlalchemy")
 def test_pois(db: Session = Depends(get_db)):

@@ -48,3 +48,12 @@ class UserOut(BaseModel):
 class UserLogin(BaseModel):
     email = EmailStr
     password = str
+
+# Access Token Model
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+# Token data model
+class TokenData(BaseModel):
+    id: Optional[str] = None
