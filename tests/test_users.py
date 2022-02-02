@@ -1,6 +1,9 @@
 from fastapi.testclient import TestClient
 from app.main import app
 import pytest
+from jose import jwt
+from .. import schemas
+from app.config import settings
 
 # Test for get All users route
 def test_get_all_users(client):
@@ -34,3 +37,22 @@ def test_delete_user(client, test_users):
     response = client.delete("/users/1")
     assert response.status_code == 204
 
+# Test User Login
+def test_login_user(client, test_user):
+    res = client.post(
+        "/login", data={"username": test_user['email'], 
+        "password": test_user["password"]})
+    login_res = schemas.Token(**res.json())
+    payload = jwt.decode(login_res.access_token,settings.secret_key, algorithms=[settings.algorithm])
+    id: str = payload.get("user_id")
+    assert id == test_user['id']
+    assert login_res.token_type == "bearer"
+    assert res.status_code == 200
+
+# Test Different Types of Incorrect Login using Parametrize
+@pytest.mark.parametrize("email, password, status_code", [("wrong@email.com","wrong",403), ("thisiswrong@mail.com","wrongagain",403),(None, "password",422)])
+def test_incorrect_login(client, test_user, email,password,status_code):
+    res = client.post(
+        "/login", data={"username": email, 
+        "password": password})
+    assert res.status_code == status_code
