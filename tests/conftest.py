@@ -57,3 +57,26 @@ def test_users(client):
     assert test_user1.status_code == 201
     test_user2 = client.post("/users", json=users_data[1])
     assert test_user2.status_code == 201
+
+@pytest.fixture
+def test_user(client):
+    users_data = { "email": "test3@api.ie", 
+                    "password": "secretword" 
+                }
+    test_user = client.post("/users", json=users_data)
+    print(test_user)
+    assert test_user.status_code == 201
+
+@pytest.fixture()
+def test_user2(client):
+    user_data = {
+        "email": "g@gmail.com",
+        "password": "password123"
+    }
+    response = client.post("/users", json=user_data)
+    assert response.status_code == 201
+    print(response)
+    new_user = (response.json())
+    assert new_user['email'] == user_data["email"]
+    new_user['password'] = user_data['password']
+    return new_user

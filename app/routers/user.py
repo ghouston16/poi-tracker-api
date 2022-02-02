@@ -21,7 +21,7 @@ router = APIRouter(
 # User Methods
 
 # Create user in DB with SQLAlchemy
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
+@router.post("", status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     # TO-DO :hash the password - user.password
     hashed_pwd = pwd_context.hash(user.password)
@@ -33,7 +33,7 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 # Retrieve all users from DB and return List/Array
-@router.get("/",status_code=status.HTTP_200_OK, response_model=List[schemas.UserOut])
+@router.get("",status_code=status.HTTP_200_OK, response_model=List[schemas.UserOut])
 def get_users(db: Session = Depends(get_db)):
     all_users = db.query(models.User).all()
     return all_users

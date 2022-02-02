@@ -15,13 +15,13 @@ router = APIRouter(
 )
 
     
-@router.get("/",status_code=status.HTTP_200_OK, response_model=List[schemas.Poi])
+@router.get("",status_code=status.HTTP_200_OK, response_model=List[schemas.Poi])
 def get_pois(db: Session = Depends(get_db)):
     all_pois = db.query(models.Poi).all()
     return all_pois
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.Poi)
+@router.post("", status_code=status.HTTP_201_CREATED, response_model=schemas.Poi)
 def create_pois(poi: schemas.PoiCreate, db: Session = Depends(get_db)):
     new_poi = models.Poi(**poi.dict())
     db.add(new_poi)
