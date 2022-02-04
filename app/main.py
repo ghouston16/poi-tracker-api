@@ -9,7 +9,7 @@ from . import models
 from .database import engine, get_db
 from passlib.context import CryptContext
 from .routers import poi, user, authenticate
-
+from fastapi.middleware.cors import CORSMiddleware
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 app = FastAPI()
@@ -25,6 +25,19 @@ while True:
     except Exception as error: 
             time.sleep(5)
             print('Error connecting to Db')
+
+
+# Change this to Web App URL
+origins = ["*"]
+
+# CORS Middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
  # Include Routers
 app.include_router(poi.router)
