@@ -8,6 +8,7 @@ from app.database import get_db
 from app.database import Base
 import pytest
 from app import models
+from app.oauth2 import create_jwt
 
 
 SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:Expires21!!@localhost/poi_api_db_test'
@@ -16,7 +17,7 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-
+# Creates a connection to testing DB and ensures tables are correct
 @pytest.fixture()
 def session():
     # Drop all drops in testing DB
@@ -40,7 +41,7 @@ def client(session): # session param calls session fixture before code
             session.close()
     app.dependency_overrides[get_db] = override_get_db
     yield TestClient(app)
-
+# Test POI fixture data for pytest
 @pytest.fixture
 def test_pois(client):
     pois_data = [{ "title": "title of poi 1", "description": "content of poi 1",
@@ -59,7 +60,7 @@ def test_users(client):
     assert test_user1.status_code == 201
     test_user2 = client.post("/users", json=users_data[1])
     assert test_user2.status_code == 201
-
+# Test User fixture
 @pytest.fixture
 def test_user(client):
     users_data = { "email": "test3@api.ie", 
@@ -69,6 +70,7 @@ def test_user(client):
     print(test_user)
     assert test_user.status_code == 201
 
+# Second Test User
 @pytest.fixture()
 def test_user2(client):
     user_data = {
@@ -82,3 +84,16 @@ def test_user2(client):
     assert new_user['email'] == user_data["email"]
     new_user['password'] = user_data['password']
     return new_user
+
+# Fixture for creating testing jwt
+@pytest.fixture()
+def access_token(test_user):
+    return create_jwt({"user_id":test_user['id']})
+
+@pytest.fixture()
+def client_auth(client, access_token):
+    client.headers = {
+        **client.headers,
+        "Authorization": f"Bearer {access_token}"
+    }
+    return client
