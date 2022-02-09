@@ -1,7 +1,7 @@
 from typing import List, Optional
 from fastapi import Depends, FastAPI, Response, status, HTTPException, APIRouter
 from sqlalchemy.orm import Session
-from .. import models, schemas
+from .. import models, schemas, oauth2
 from ..database import get_db
 from passlib.context import CryptContext
 
@@ -16,13 +16,14 @@ router = APIRouter(
 
     
 @router.get("",status_code=status.HTTP_200_OK, response_model=List[schemas.Poi])
-def get_pois(db: Session = Depends(get_db)):
+def get_pois(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     all_pois = db.query(models.Poi).all()
+   # print(all_pois)
     return all_pois
 
 
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=schemas.Poi)
-def create_pois(poi: schemas.PoiCreate, db: Session = Depends(get_db)):
+def create_pois(poi: schemas.PoiCreate, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     new_poi = models.Poi(**poi.dict())
     db.add(new_poi)
     db.commit()
@@ -31,7 +32,7 @@ def create_pois(poi: schemas.PoiCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.Poi)
-def get_poi(id: int, db: Session = Depends(get_db)):
+def get_poi(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     find_poi = db.query(models.Poi).filter(models.Poi.id == id)
     poi = find_poi.first()
     if not poi:
@@ -41,7 +42,7 @@ def get_poi(id: int, db: Session = Depends(get_db)):
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_poi(id: int, db: Session = Depends(get_db)):
+def delete_poi(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     find_poi = db.query(models.Poi).filter(models.Poi.id == id)
     if find_poi.first() == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -51,7 +52,7 @@ def delete_poi(id: int, db: Session = Depends(get_db)):
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 @router.put("/{id}",status_code=status.HTTP_201_CREATED, response_model=schemas.Poi)
-def update_poi(id: int, poi: schemas.PoiCreate, db: Session = Depends(get_db)):
+def update_poi(id: int, poi: schemas.PoiCreate, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     find_poi = db.query(models.Poi).filter(models.Poi.id == id)
     update_poi = find_poi.first()
     if update_poi == None:
