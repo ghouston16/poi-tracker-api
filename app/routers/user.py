@@ -57,6 +57,8 @@ def update_user(id: int, updated_user: schemas.UserCreate, db: Session = Depends
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"user with id: {id} does not exist")
     # To-do: hash the password - user.password
+    hashed_pwd = pwd_context.hash(user.password)
+    updated_user.password = hashed_pwd
     find_user.update(updated_user.dict(), synchronize_session=False)
     db.commit()
     return find_user.first()
