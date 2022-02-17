@@ -48,6 +48,10 @@ def delete_poi(id: int, db: Session = Depends(get_db), current_user: int = Depen
     if find_poi.first() == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"poi with id: {id} does not exist")
+    # delete only pois created by logged in user
+    if find_poi.creator != current_user.id:
+                raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail=f"Cannot delete poi")
     find_poi.delete(synchronize_session=False)
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
@@ -59,7 +63,11 @@ def update_poi(id: int, poi: schemas.PoiCreate, db: Session = Depends(get_db), c
     if update_poi == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"poi with id: {id} does not exist")
-
+      # Update only pois created by logged in user
+    if update_poi.creator != current_user.id:
+                raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail=f"Cannot delete poi")
+    update_poi.creator = current_user.id
     find_poi.update(poi.dict(), synchronize_session=False)
     db.commit()         
     return update_poi
