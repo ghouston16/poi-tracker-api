@@ -13,6 +13,7 @@ class PoiBase(BaseModel):
     lat: str
     lng: str
     published: bool = True
+    creator: int
 
 class PoiCreate(PoiBase):
     pass

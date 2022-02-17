@@ -25,6 +25,7 @@ def get_pois(db: Session = Depends(get_db), current_user: int = Depends(oauth2.g
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=schemas.Poi)
 def create_pois(poi: schemas.PoiCreate, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     new_poi = models.Poi(**poi.dict())
+    new_poi.creator = current_user.id
     db.add(new_poi)
     db.commit()
     db.refresh(new_poi)
