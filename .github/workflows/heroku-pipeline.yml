@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   build:
     environment:
-      name: poi-api-social build
+      name: poi-tracker-fastapi
     runs-on: ubuntu-latest
     steps:
         - name: pulling git repo
@@ -20,7 +20,7 @@ jobs:
           run: pip install -r requirements.txt
   test:
     environment:
-      name: poi-api-social test
+      name: poi-tracker-fastapi
     needs: [build]
     env:
       DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
@@ -65,9 +65,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: [test]
-    environment:
-      name: 
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
-          heroku_email: ${{secrets.HEROKU_EMAIL}}
+  environment:
+        name: production
+    steps:
+        - name: pulling git repo
+          uses: actions/checkout@v2
+        - name: deploying to Heroku
+          uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+          with:
+            heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+            heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+            heroku_email: ${{secrets.HEROKU_EMAIL}}
