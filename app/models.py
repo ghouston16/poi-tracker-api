@@ -1,8 +1,15 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 
 from .database import Base
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql.expression import text
+from sqlalchemy.sql.schema import ForeignKey
+from sqlalchemy.sql.sqltypes import INT, TIMESTAMP, Boolean
+from .database import Base
+from sqlalchemy import Column, Integer, String, Boolean
+
 
 
 class Poi(Base):
@@ -14,8 +21,11 @@ class Poi(Base):
     lng = Column(String, nullable=True)
     category =  Column(String, nullable=True)
     published = Column(Boolean, server_default='TRUE', nullable=False)
+    creator = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False, server_default=text('now()'))
+    # SQLAlchemy will recognise relationship once defined
+    owner = relationship("User")
 
 
 class User(Base):
