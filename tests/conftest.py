@@ -62,9 +62,9 @@ def client_auth(client, access_token):
 @pytest.fixture
 def test_pois(client_auth):
     pois_data = [{ "title": "title of poi 1", "description": "words about a place",
-             "category": "Historic", "lat": "", "lng": "", "id": 1},{
+             "category": "Historic", "lat": "", "lng": "", "id": 1, "creator": 1},{
             "title": "title of poi 2", "description": "content of poi 2", 
-            "category": "Historic", "lat": "", "lng": "", "id": 2 }]
+            "category": "Historic", "lat": "", "lng": "", "id": 2, "creator": 1}]
     test_poi1 = client_auth.post("/pois", json=pois_data[0])
     assert test_poi1.status_code == 201
     test_poi2 = client_auth.post("/pois", json=pois_data[1])
@@ -74,25 +74,6 @@ def test_pois(client_auth):
     new_pois = response.json()
     print(new_pois)
     return new_pois
-
-
-'''
-    test_poi1 = client.post("/pois", json=pois_data[0])
-    assert test_poi1.status_code == 201
-    test_poi2 = client.post("/pois", json=pois_data[1])
-    assert test_poi2.status_code == 201
-
-@pytest.fixture
-def test_pois(client_auth):
-    pois_data = [{ "title": "title of poi 1", "description": "content of poi 1",
-             "category": "Historic", "lat": "", "lng": "", "id": 1},{
-            "title": "title of poi 2", "description": "content of poi 2", 
-            "category": "Historic", "lat": "", "lng": "", "id": 2 }]
-    test_poi1 = client_auth.post("/pois", json=pois_data[0])
-    assert test_poi1.status_code == 201
-    test_poi2 = client_auth.post("/pois", json=pois_data[1])
-    assert test_poi2.status_code == 201
-'''
 
 @pytest.fixture
 def test_users(client):

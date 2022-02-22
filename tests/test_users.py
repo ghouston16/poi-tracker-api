@@ -6,8 +6,8 @@ from app import schemas
 from app.config import settings
 
 # Test for get All users route
-def test_get_all_users(client):
-    response = client.get(
+def test_get_all_users(client_auth):
+    response = client_auth.get(
         "/users")
     print(response.json())
     assert response.status_code == 200
@@ -20,21 +20,22 @@ def test_create_user(client):
     assert response.status_code == 201
 
 # Test for Find By Id
-def test_get_user_by_id(client, test_users):
-    response = client.get("/users/1")
+def test_get_user_by_id(client_auth, test_users):
+    response = client_auth.get("/users/1")
     print(response.json())
     assert response.status_code == 200
 
 # Test Update User
-def test_update_user(client, test_users):
+def test_update_user(client_auth, test_users):
     user_data = {"email": "changed@email.ie", 
                 "password": "secretworld" }
-    response = client.put("/users/1",json= user_data)
+    response = client_auth.put("/users/1",json= user_data)
     assert response.status_code == 201
 
 # Test Delete User 
-def test_delete_user(client, test_users):
-    response = client.delete("/users/1")
+def test_delete_user(client_auth, test_user):
+    response = client_auth.delete(f"/users/{test_user['id']}")
+    print(response)
     assert response.status_code == 204
 
 # Test User Login

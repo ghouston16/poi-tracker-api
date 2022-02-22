@@ -77,7 +77,7 @@ def delete_user(id: int, db: Session = Depends(get_db), current_user: int = Depe
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"user with id: {id} does not exist")
     # Check requested user against current user id - only allow matching ids
-    if user.id != current_user.id:
+    if user.first().id != current_user.id:
                 raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail=f"Cannot delete this user")
     user.delete(synchronize_session=False)
