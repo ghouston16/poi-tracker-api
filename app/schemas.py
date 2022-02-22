@@ -5,30 +5,6 @@ from typing import Optional
 
 from pydantic.types import conint
 
-# Poi Model
-class PoiBase(BaseModel):
-    title: str
-    description: str
-    category: str
-    lat: str
-    lng: str
-    published: bool = True
-
-class PoiCreate(PoiBase):
-    pass
-
-# Response Model
-class Poi(PoiBase):
-    id: int
-    created_at: datetime
-    class Config: 
-        orm_mode = True
-
-class PoiOut(BaseModel):
-    Poi: Poi
-    class Config: 
-        orm_mode = True
-
 ## User Models
 
 class UserCreate(BaseModel):
@@ -48,6 +24,34 @@ class UserOut(BaseModel):
 class UserLogin(BaseModel):
     email = EmailStr
     password = str
+
+# Poi Model
+class PoiBase(BaseModel):
+    title: str
+    description: str
+    category: str
+    lat: str
+    lng: str
+    published: bool = True
+    creator: int
+
+class PoiCreate(PoiBase):
+    pass
+
+# Response Model
+class Poi(PoiBase):
+    id: int
+    created_at: datetime
+    owner: UserOut
+    class Config: 
+        orm_mode = True
+
+class PoiOut(BaseModel):
+    Poi: Poi
+    class Config: 
+        orm_mode = True
+
+
 
 # Access Token Model
 class Token(BaseModel):
