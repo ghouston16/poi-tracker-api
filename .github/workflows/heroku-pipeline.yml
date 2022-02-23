@@ -1,11 +1,12 @@
-name: Build and Deploy Code
+name: Build, Test and Deploy Code
 
 on: [push, pull_request]
 
 jobs:
   build:
     environment:
-      name: fast-api-social
+      name: poi-tracker-fastapi
+    runs-on: ubuntu-latest
     env:
       DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
       DATABASE_PORT: ${{secrets.DATABASE_PORT}}
@@ -16,7 +17,6 @@ jobs:
       ALGORITHM: ${{secrets.ALGORITHM}}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
       DATABASE_URL: ${{secrets.DATABASE_URL}}
-
     services:
       postgres:
         image: postgres
@@ -30,7 +30,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    runs-on: ubuntu-latest
     steps:
         - name: pulling git repo
           uses: actions/checkout@v2
@@ -46,18 +45,19 @@ jobs:
           run: |
             pip install pytest
             pytest
-            
+
+        
   deploy:
     runs-on: ubuntu-latest
-    needs: [build]
+    needs: [test]
     environment:
-      name: production
+        name: production
     steps:
-      - name: pulling git repo
-        uses: actions/checkout@v2
-      - name: deploying to Heroku
-        uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
-          heroku_email: ${{secrets.HEROKU_EMAIL}}
+        - name: pulling git repo
+          uses: actions/checkout@v2
+        - name: deploying to Heroku
+          uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+          with:
+            heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+            heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+            heroku_email: ${{secrets.HEROKU_EMAIL}}
