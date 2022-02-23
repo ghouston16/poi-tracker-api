@@ -24,6 +24,7 @@ def upgrade():
     # add_column max 4 positional args so each column added indiviually
     op.add_column('pois', sa.Column('description', sa.String(), nullable=False)
    ,)
+    # Lat Column
     op.add_column('pois', sa.Column('lat', sa.String(), nullable=True),)
     
     op.add_column('pois', sa.Column('lng', sa.String(), nullable=True)
