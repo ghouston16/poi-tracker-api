@@ -14,8 +14,9 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 app = FastAPI()
 
-models.Base.metadata.create_all(bind=engine)
-
+# Obselete with Alembic
+#models.Base.metadata.create_all(bind=engine)
+'''
 while True:
     try:
             conn = psycopg2.connect(host=settings.database_hostname, database=settings.database_name,user=settings.database_username,password=settings.database_password, cursor_factory=RealDictCursor)
@@ -25,7 +26,7 @@ while True:
     except Exception as error: 
             time.sleep(5)
             print('Error connecting to Db')
-
+'''
 
 # Change this to Web App URL
 origins = ["*"]
