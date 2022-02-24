@@ -1,6 +1,7 @@
 name: Build, Test and Deploy Code
 
 on: [push, pull_request]
+branch: master
 
 jobs:
   build:
