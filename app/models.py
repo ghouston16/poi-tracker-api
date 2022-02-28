@@ -35,3 +35,9 @@ class User(Base):
     password = Column(String, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False, server_default=text('now()'))
+
+# Likes model added 
+class Like(Base):
+    __tablename__= "likes"
+    user_id= Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
+    poi_id= Column(Integer,ForeignKey("pois.id", ondelete="CASCADE"), primary_key=True)

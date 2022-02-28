@@ -62,8 +62,8 @@ def client_auth(client, access_token):
 
 @pytest.fixture
 def test_pois(client_auth):
-    pois_data = [{ "title": "title of poi 1", "description": "words about a place",
-             "category": "Historic", "lat": "", "lng": "", "id": 1, "creator": 1},{
+    pois_data = [{ "id": 1, "title": "title of poi 1", "description": "words about a place",
+             "category": "Historic", "lat": "", "lng": "", "creator": 1},{
             "title": "title of poi 2", "description": "content of poi 2", 
             "category": "Historic", "lat": "", "lng": "", "id": 2, "creator": 1}]
     test_poi1 = client_auth.post("/pois", json=pois_data[0])
@@ -78,7 +78,7 @@ def test_pois(client_auth):
 
 @pytest.fixture
 def test_users(client):
-    users_data = [{ "email": "test1@api.ie", "password": "secretword"} ,{ "email": "test2@api.ie", "password": "secretword"} ]
+    users_data = [{ "id": 1,"email": "test1@api.ie", "password": "secretword"} ,{ "id": 2,"email": "test2@api.ie", "password": "secretword"} ]
     test_user1 = client.post("/users", json=users_data[0])
     assert test_user1.status_code == 201
     test_user2 = client.post("/users", json=users_data[1])
