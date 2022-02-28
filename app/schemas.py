@@ -46,13 +46,6 @@ class Poi(PoiBase):
     class Config: 
         orm_mode = True
 
-class PoiOut(BaseModel):
-    Poi: Poi
-    class Config: 
-        orm_mode = True
-
-
-
 # Access Token Model
 class Token(BaseModel):
     access_token: str
@@ -61,3 +54,14 @@ class Token(BaseModel):
 # Token data model
 class TokenData(BaseModel):
     id: Optional[str] = None
+
+# Like Model
+class Like(BaseModel):
+    poi_id:int
+    dir: conint(le=1)
+
+class PoiOut(BaseModel):
+    Poi: Poi
+    likes: int
+    class Config: 
+        orm_mode = True
