@@ -65,3 +65,10 @@ class PoiOut(BaseModel):
     likes: int
     class Config: 
         orm_mode = True
+
+class Comment(BaseModel):
+    text: str
+    commented_poi: str
+    published: bool = True
+    creator: int
+    

@@ -41,3 +41,16 @@ class Like(Base):
     __tablename__= "likes"
     user_id= Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
     poi_id= Column(Integer,ForeignKey("pois.id", ondelete="CASCADE"), primary_key=True)
+
+class Comment(Base):
+    __tablename__ = "comments"
+    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    text = Column(String, nullable=False)
+    commented_poi = Column(Integer, ForeignKey("pois.id", ondelete="CASCADE"), nullable=False)
+    published = Column(Boolean, server_default='TRUE', nullable=False)
+    creator = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    created_at = Column(TIMESTAMP(timezone=True),
+                        nullable=False, server_default=text('now()'))
+    # SQLAlchemy will recognise relationship once defined
+    parent = relationship("Poi")
+    owner = relationship("User")
