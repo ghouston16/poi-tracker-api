@@ -67,8 +67,7 @@ class PoiOut(BaseModel):
         orm_mode = True
 
 class Comment(BaseModel):
-    text: str
+    comment: str
     commented_poi: str
     published: bool = True
     creator: int
-    
