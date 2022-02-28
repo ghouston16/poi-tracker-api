@@ -43,14 +43,14 @@ def test_authorized_get_all_pois(client_auth, test_pois):
 
 # Test for Creating POI
 def test_create_poi_auth(client_auth, test_user):
-    poi_data = {"title": "title of poi 3", "description": "poi 3", "category": "Historic", "lat": "1.000", "lng": "4.000", "published": False, "creator": test_user['id'] }
+    poi_data = {"title": "title of poi 3", "description": "poi 3", "category": "Historic", "lat": "1.000", "lng": "4.000", "published": True, "creator": test_user['id'] }
     response = client_auth.post("/pois", json=poi_data)
     created_poi = schemas.Poi(**response.json())
     assert response.status_code == 201
     assert created_poi.title == "title of poi 3"
     assert created_poi.description == "poi 3"
     assert created_poi.id == test_user['id']
-    assert created_poi.published == False
+    assert created_poi.published == True
 
 
 # Test for Find By Id - Auth User
