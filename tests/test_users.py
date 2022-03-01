@@ -30,7 +30,7 @@ def test_update_user(client_auth, test_users):
     user_data = {"email": "changed@email.ie", 
                 "password": "secretworld" }
     response = client_auth.put("/users/1",json= user_data)
-    assert response.status_code == 201
+    assert response.status_code == 201 
 
 # Test Delete User 
 def test_delete_user(client_auth, test_user):
