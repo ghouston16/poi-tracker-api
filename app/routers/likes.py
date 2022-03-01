@@ -13,7 +13,6 @@ router = APIRouter(
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def like(like: schemas.Like, db: Session = Depends(database.get_db), 
 current_user: int =Depends(oauth2.get_current_user)):
-    print(current_user)
     poi = db.query(models.Poi).filter(models.Poi.id== like.poi_id).first()
     if not poi:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Poi id: {like.poi_id} doe snot exist")

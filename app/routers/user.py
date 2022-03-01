@@ -44,10 +44,12 @@ def get_user(id: int, db: Session = Depends(get_db), current_user: int = Depends
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"poi with id: {id} was not found")
+
+    #TO-DO: Remove this control
      # Check requested user against current user id - only allow matching ids
-    if user.id != current_user.id:
-                raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
-                            detail=f"Cannot Access This User")
+    #if user.id != current_user.id: 
+    #           raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+    #                        detail=f"Cannot Access This User")
     return user
 
 # Update user

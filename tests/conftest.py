@@ -9,7 +9,7 @@ from app.main import app
 from app.database import get_db
 from app.database import Base
 import pytest
-from app import models
+from app import models, schemas
 from app.oauth2 import create_access_token
 from app.config import settings
 
@@ -114,3 +114,35 @@ def test_user2(client):
     assert new_user['email'] == user_data["email"]
     new_user['password'] = user_data['password']
     return new_user
+
+@pytest.fixture()
+def test_comments(client_auth, test_user, test_pois):
+    comments_data = [
+    {
+        "comment": "test comment",
+        "poi_id": test_pois[0]['id'],
+        "creator": test_user['id'],
+        "id": 1,
+        "created_at": "2022-03-01T13:40:14.440465+00:00",
+
+    },
+    {
+        "comment": "test comment",
+        "poi_id": test_pois[0]['id'],
+        "creator":  test_user['id'],
+        "id": 2,
+        "created_at": "2022-03-01T13:41:02.889841+00:00",
+        }
+    ]
+    response = client_auth.post(f"/pois/1/comments", json=comments_data[0])
+    assert response.status_code == 201
+    print(response)
+    new_comment1 = response.json()
+    assert new_comment1['comment'] == comments_data[0]['comment']
+    response = client_auth.post(f"/pois/2/comments", json=comments_data[1])
+    assert response.status_code == 201
+    new_comment2 = response.json()
+    assert new_comment1['comment'] == comments_data[1]['comment']
+    #new_user['password'] = user_data['password']
+    test_comments = [new_comment1, new_comment2]
+    return test_comments

@@ -8,7 +8,7 @@ from app.config import settings
 from . import models
 from .database import engine, get_db
 from passlib.context import CryptContext
-from .routers import poi, user, authenticate, likes
+from .routers import poi, user, authenticate, likes, comments
 from fastapi.middleware.cors import CORSMiddleware
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -16,17 +16,6 @@ app = FastAPI()
 
 # Obselete with Alembic
 #models.Base.metadata.create_all(bind=engine)
-'''
-while True:
-    try:
-            conn = psycopg2.connect(host=settings.database_hostname, database=settings.database_name,user=settings.database_username,password=settings.database_password, cursor_factory=RealDictCursor)
-            cursor = conn.cursor()
-            print('DB connection success')
-            break
-    except Exception as error: 
-            time.sleep(5)
-            print('Error connecting to Db')
-'''
 
 # Change this to Web App URL
 origins = ["*"]
@@ -45,6 +34,7 @@ app.include_router(poi.router)
 app.include_router(user.router)
 app.include_router(authenticate.router)
 app.include_router(likes.router)
+app.include_router(comments.router)
 
 @app.get("/sqlalchemy")
 def test_pois(db: Session = Depends(get_db)):
