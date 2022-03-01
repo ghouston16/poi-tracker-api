@@ -16,7 +16,6 @@ current_user: int =Depends(oauth2.get_current_user)):
     poi = db.query(models.Poi).filter(models.Poi.id== like.poi_id).first()
     if not poi:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Poi id: {like.poi_id} doe snot exist")
-
     like_query = db.query(models.Like).filter(models.Like.poi_id == like.poi_id, models.Like.user_id== current_user.id)
     found_like = like_query.first()
     if (like.dir == 1): 
