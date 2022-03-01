@@ -59,9 +59,8 @@ def client_auth(client, access_token):
     return client
 
 # Test POI fixture data for pytest
-
 @pytest.fixture
-def test_pois(client_auth):
+def test_pois(client_auth): # Authorized client needed to create 
     pois_data = [{ "id": 1, "title": "title of poi 1", "description": "words about a place",
              "category": "Historic", "lat": "", "lng": "", "creator": 1},{
             "title": "title of poi 2", "description": "content of poi 2", 
@@ -75,9 +74,9 @@ def test_pois(client_auth):
     new_pois = response.json()
     print(new_pois)
     return new_pois
-
+# Users fixtures for testing purposes
 @pytest.fixture
-def test_users(client):
+def test_users(client): 
     users_data = [{ "id": 1,"email": "test1@api.ie", "password": "secretword"} ,{ "id": 2,"email": "test2@api.ie", "password": "secretword"} ]
     test_user1 = client.post("/users", json=users_data[0])
     assert test_user1.status_code == 201
@@ -85,7 +84,7 @@ def test_users(client):
     assert test_user2.status_code == 201
     return users_data 
 
-# Test User fixture
+# Test User fixture for testing
 @pytest.fixture
 def test_user(client):
     users_data = { "email": "test3@api.ie", 
@@ -100,7 +99,7 @@ def test_user(client):
     return new_user
 
 
-# Second Test User
+# Second Test User fixtures for testing purposes
 @pytest.fixture()
 def test_user2(client):
     user_data = {
@@ -115,8 +114,9 @@ def test_user2(client):
     new_user['password'] = user_data['password']
     return new_user
 
+# Comment fixtures for testing purposes
 @pytest.fixture()
-def test_comments(client_auth, test_user, test_pois):
+def test_comments(client_auth, test_user, test_pois): #  Authorized client needed to create 
     comments_data = [
     {
         "comment": "test comment",
@@ -143,6 +143,5 @@ def test_comments(client_auth, test_user, test_pois):
     assert response.status_code == 201
     new_comment2 = response.json()
     assert new_comment1['comment'] == comments_data[1]['comment']
-    #new_user['password'] = user_data['password']
     test_comments = [new_comment1, new_comment2]
     return test_comments
