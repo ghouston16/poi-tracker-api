@@ -12,7 +12,7 @@ router = APIRouter()
 
 router = APIRouter(
     prefix="/pois",
-    tags=['Commnets']
+    tags=['Comments']
 )
 
     
