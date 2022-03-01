@@ -68,6 +68,13 @@ class PoiOut(BaseModel):
 
 class Comment(BaseModel):
     comment: str
-    commented_poi: str
     published: bool = True
+    commented_poi: str
     creator: int
+
+class CommentOut(Comment):
+    id: int
+    created_at: datetime
+    owner: UserOut
+    class Config: 
+        orm_mode = True
