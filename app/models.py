@@ -46,7 +46,7 @@ class Comment(Base):
     __tablename__ = "comments"
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     comment = Column(String, nullable=False)
-    commented_poi = Column(Integer, ForeignKey("pois.id", ondelete="CASCADE"), nullable=False)
+    poi_id = Column(Integer, ForeignKey("pois.id", ondelete="CASCADE"), nullable=False)
     published = Column(Boolean, server_default='TRUE', nullable=False)
     creator = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     created_at = Column(TIMESTAMP(timezone=True),
