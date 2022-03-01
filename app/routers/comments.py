@@ -16,11 +16,11 @@ router = APIRouter(
 )
 
     
-@router.get("/comments",status_code=status.HTTP_200_OK, response_model=List[schemas.CommentOut])
+@router.get("/comments/{id}",status_code=status.HTTP_200_OK, response_model=schemas.CommentOut)
 def get_comments(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
-    all_comments = db.query(models.Comment).all()
-    print(all_comments)
-    return all_comments
+    found_comments = db.query(models.Comment).filter(models.Comment.id == id)
+    comment = found_comments.first()
+    return comment
 
 # Creates Comments associated with a given POI
 @router.post("/{id}/comments", status_code=status.HTTP_201_CREATED, response_model=schemas.CommentOut)
@@ -56,3 +56,20 @@ def update_comments(id: int, poi_id: int, comment: schemas.Comment, db: Session 
     find_comment.update(comment.dict(), synchronize_session=False)
     db.commit()         
     return update_comment
+
+# Allows user to delete own comments only
+@router.delete("/{poi_id}/comments/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_poi(id: int, poi_id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+        find_comment = db.query(models.Comment).filter(models.Comment.id == id)
+        delete_comment = find_comment.first()
+        print(delete_comment)
+        if delete_comment == None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail=f"poi with id: {id} does not exist")
+        # delete only pois created by logged in user
+        if find_comment.first().creator != current_user.id:
+                    raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                                detail=f"Cannot delete poi")
+        find_comment.delete(synchronize_session=False)
+        db.commit()
+        return Response(status_code=status.HTTP_204_NO_CONTENT)

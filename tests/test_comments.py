@@ -22,7 +22,7 @@ def test_no_auth_get_all_poi_comments(client):
 # Test for Find By Id - No Auth User
 def test_get_comment_by_id_no_auth(client):
    response = client.get(
-       f"/comments/1")
+       f"/pois/comments/1")
    print(response.json())
    assert response.status_code == 401
 
@@ -32,15 +32,6 @@ def test_update_comment_no_auth(client):
     comment_data = {"comment": "updated", "creator": 1, "poi_id": 1, "published": True }
     response = client.put(f"pois/{comment_data['poi_id']}/comments/1",json=comment_data)
     assert response.status_code == 401
-
-# Test for get All comments route - Authenticated User
-def test_authorized_get_all_comments(client_auth, test_comments):
-    response = client_auth.get(
-        "/comments")
-    print(response.json())
-    print(test_comments)
-    assert response.status_code == 200
-    # assert len(response.json()) == len(test_comments)
 
 # Test for Creating POI
 def test_create_comment_auth(client_auth, test_user, test_pois):
@@ -77,12 +68,12 @@ def test_update_comment(client_auth, test_comments, test_user):
 
 
 # Test Delete POI - No Atuh
-def test_delete_comment(client, test_comments):
-    response = client.delete("/comments/1")
+def test_delete_comment(client):
+    response = client.delete(f"/pois/1/comments/1")
     assert response.status_code == 401
 
 # Test Authenticated User Delete POI 
-def test_delete_comment(client_auth, test_comments):
-    response = client_auth.delete(f"/{test_comments[0]['poi_id']}/comments/{test_comments[0]['id']}")
+def test_delete_comment_auth(client_auth, test_comments, test_user):
+    response = client_auth.delete(f"/pois/{test_comments[0]['poi_id']}/comments/{test_comments[0]['id']}")
     assert response.status_code == 204
 
