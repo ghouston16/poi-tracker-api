@@ -14,14 +14,12 @@ router = APIRouter(
     prefix="/pois",
     tags=['POIs']
 )
-
     
 @router.get("",status_code=status.HTTP_200_OK, response_model=List[schemas.Poi])
 def get_pois(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     all_pois = db.query(models.Poi).all()
    # print(all_pois)
     return all_pois
-
 
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=schemas.Poi)
 def create_pois(poi: schemas.PoiCreate, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
@@ -31,7 +29,6 @@ def create_pois(poi: schemas.PoiCreate, db: Session = Depends(get_db), current_u
     db.commit()
     db.refresh(new_poi)
     return new_poi
-
 
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.PoiOut)
 def get_poi(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
@@ -45,7 +42,6 @@ def get_poi(id: int, db: Session = Depends(get_db), current_user: int = Depends(
                                     detail=f"Not authorized")
     '''
     return poi
-
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_poi(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
