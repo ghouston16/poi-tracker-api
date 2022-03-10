@@ -30,9 +30,22 @@ def create_pois(poi: schemas.PoiCreate, db: Session = Depends(get_db), current_u
     db.refresh(new_poi)
     return new_poi
 
-@router.get("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.PoiOut)
-def get_poi(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+@router.get("/{id}/likes", status_code=status.HTTP_200_OK, response_model=schemas.PoiOut)
+def get_poi_likes(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     poi = db.query(models.Poi,func.count(models.Like.poi_id).label("likes")).join(models.Like,models.Like.poi_id==models.Poi.id, isouter=True).group_by(models.Poi.id).filter(models.Poi.id == id).first()
+    if not poi:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"poi with id: {id} was not found")
+    
+    #    if poi.creator != current_user.id:
+    #                    raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+    #                                detail=f"Not authorized")
+    
+    return poi
+
+@router.get("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.Poi)
+def get_poi(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+    poi = db.query(models.Poi).filter(models.Poi.id == id).first()
     if not poi:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"poi with id: {id} was not found")
