@@ -6,7 +6,7 @@ from app import schemas
 import pytest
 
 
-# Test for unauthenticated attempt to create POI 
+# Test for unauthenticated attempt to comment on a poi
 def test_create_comment_no_auth(client):
     comment_data = {"comment": "comment 3", "creator": 1, "poi_id": 1, "published": True }
     response = client.post(f"pois/{comment_data['poi_id']}/comments", json=comment_data)
@@ -19,7 +19,7 @@ def test_no_auth_get_all_poi_comments(client):
     print(response.json())
     assert response.status_code == 401 # Unauthorized
 
-# Test for Find By Id - No Auth User
+# Test for comment Find By Id - No Auth User
 def test_get_comment_by_id_no_auth(client):
    response = client.get(
        f"/pois/comments/1")
@@ -27,13 +27,13 @@ def test_get_comment_by_id_no_auth(client):
    assert response.status_code == 401 # Unauthorized
 
 
-# Test Update POI - No Auth
+# Test Update comment - No Auth
 def test_update_comment_no_auth(client):
     comment_data = {"comment": "updated", "creator": 1, "poi_id": 1, "published": True }
     response = client.put(f"pois/{comment_data['poi_id']}/comments/1",json=comment_data)
     assert response.status_code == 401 # Unauthorized
 
-# Test for Creating POI
+# Test for Creating POI Comment
 def test_create_comment_auth(client_auth, test_user, test_pois):
     comment_data = {"comment": "test", "poi_id": test_pois[0]['id'], "published": True, "creator": test_user['id'] }
     response = client_auth.post(f"pois/{comment_data['poi_id']}/comments", json=comment_data)
