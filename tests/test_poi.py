@@ -57,9 +57,9 @@ def test_create_poi_auth(client_auth, test_user):
 def test_get_poi_by_id(client_auth, test_pois):
     response = client_auth.get(
         f"/pois/1")
-    found_poi = schemas.PoiOut(**response.json())
+    found_poi = schemas.Poi(**response.json())
     test_poi = test_pois[0]
-    assert found_poi.Poi.title == test_poi['title']
+    assert found_poi.title == test_poi['title']
     assert response.status_code == 200
 
     
