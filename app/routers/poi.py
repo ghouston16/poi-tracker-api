@@ -14,7 +14,7 @@ router = APIRouter(
     prefix="/pois",
     tags=['POIs']
 )
-    
+    # I am making a change
 @router.get("",status_code=status.HTTP_200_OK, response_model=List[schemas.Poi])
 def get_pois(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     all_pois = db.query(models.Poi).all()
