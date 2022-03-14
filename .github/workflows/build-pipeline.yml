@@ -1,9 +1,10 @@
 name: Build-Verify
 
-on: [push]
-branches:
-  - develop
-  - feature/*
+on: 
+  push:
+    branches:
+      - develop
+      - feature/*
 ## Comment to test new pipeline
 jobs:
   build:
