@@ -23,7 +23,7 @@ jobs:
         - name: install all dependencies
           run: pip install -r requirements.txt
 
-  test:
+  build-test:
     environment:
       name: poi-tracker-fastapi
     needs: [build]
