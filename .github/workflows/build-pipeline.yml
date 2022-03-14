@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     environment:
-      name: fast-api-social
+      name: poi-tracker-fastapi
     runs-on: ubuntu-latest
     steps:
         - name: pulling git repo
@@ -25,7 +25,7 @@ jobs:
 
   test:
     environment:
-      name: fast-api-social
+      name: poi-tracker-fastapi
     needs: [build]
     env:
       DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
