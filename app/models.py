@@ -19,7 +19,7 @@ class Poi(Base):
     description = Column(String, nullable=False)
     lat = Column(String, nullable=True)
     lng = Column(String, nullable=True)
-    category =  Column(String, nullable=True)
+    category =  Column(Integer, nullable=True)
     published = Column(Boolean, server_default='TRUE', nullable=False)
     creator = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     created_at = Column(TIMESTAMP(timezone=True),
@@ -54,3 +54,12 @@ class Comment(Base):
     # SQLAlchemy will recognise relationship once defined
     parent = relationship("Poi")
     owner = relationship("User")
+
+# Category Model
+class Category(Base):
+    __tablename__ = "categories"
+    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    name = Column(String, nullable=False)
+    creator = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=True)
+    created_at = Column(TIMESTAMP(timezone=True),
+                        nullable=False, server_default=text('now()'))

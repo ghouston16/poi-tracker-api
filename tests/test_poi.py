@@ -62,7 +62,7 @@ def test_create_poi_auth(client_auth, test_user):
     poi_data = {
         "title": "title of poi 3",
         "description": "poi 3",
-        "category": "Historic",
+        "category": 1,
         "lat": "1.000",
         "lng": "4.000",
         "published": True,
@@ -91,7 +91,7 @@ def test_update_poi(client_auth, test_pois, test_user):
     poi_data = {
         "title": "updated",
         "description": "content of poi 3",
-        "category": "Historic",
+        "category": 2,
         "lat": "1.000",
         "lng": "4.000",
         "id": 1,
@@ -126,7 +126,7 @@ def test_update_poi_non_exist(client_auth, test_user, test_pois):
         "id": 1,
         "title": "updated poi",
         "description": "words about a place",
-        "category": "Historic",
+        "category": "1",
         "lat": "",
         "lng": "",
         "creator": 1,
