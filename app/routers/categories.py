@@ -21,7 +21,7 @@ def get_categories(db: Session = Depends(get_db), current_user: int = Depends(oa
    # print(all_categorys)
     return all_categories
 
-@router.post("", status_code=status.HTTP_201_CREATED, response_model=schemas.Category)
+@router.post("", status_code=status.HTTP_201_CREATED, response_model=schemas.CategoryOut)
 def create_category(category: schemas.Category, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     new_category = models.Category(**category.dict())
     new_category.creator = current_user.id
@@ -30,13 +30,13 @@ def create_category(category: schemas.Category, db: Session = Depends(get_db), c
     db.refresh(new_category)
     return new_category
 
-@router.get("/{id}/pois", status_code=status.HTTP_200_OK, response_model=schemas.CategoryOut)
+@router.get("/{id}/pois", status_code=status.HTTP_200_OK, response_model=List[schemas.Poi])
 def get_category_pois(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
-    category = db.query(models.Category,func.count(models.Poi.category_id).label("pois")).join(models.Poi,models.Poi.category_id==models.Category.id, isouter=True).group_by(models.Category.id).filter(models.Category.id == id).first()
-    if not category:
+    pois = db.query(models.Poi).filter(models.Poi.category== id).all()
+    if not pois:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"category with id: {id} was not found")
-    return category
+    return pois
 
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.CategoryOut)
 def get_category(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):

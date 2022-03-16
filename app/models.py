@@ -19,7 +19,7 @@ class Poi(Base):
     description = Column(String, nullable=False)
     lat = Column(String, nullable=True)
     lng = Column(String, nullable=True)
-    category =  Column(String, nullable=True)
+    category =  Column(Integer, nullable=True)
     published = Column(Boolean, server_default='TRUE', nullable=False)
     creator = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     created_at = Column(TIMESTAMP(timezone=True),
