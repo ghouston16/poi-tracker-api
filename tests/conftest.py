@@ -1,3 +1,4 @@
+from unicodedata import category
 import py
 import pytest
 
@@ -62,18 +63,18 @@ def client_auth(client, access_token):
 @pytest.fixture
 def test_pois(client_auth): # Authorized client needed to create 
     pois_data = [{ "id": 1, "title": "title of poi 1", "description": "words about a place",
-             "category": "Historic", "lat": "", "lng": "", "creator": 1},{
+             "category": 1, "lat": "", "lng": "", "creator": 1},{
             "title": "title of poi 2", "description": "content of poi 2", 
-            "category": "Historic", "lat": "", "lng": "", "id": 2, "creator": 1}]
+            "category": 2, "lat": "", "lng": "", "id": 2, "creator": 1}]
     test_poi1 = client_auth.post("/pois", json=pois_data[0])
     assert test_poi1.status_code == 201
     test_poi2 = client_auth.post("/pois", json=pois_data[1])
     assert test_poi2.status_code == 201
     response = client_auth.get("/pois")
-
     new_pois = response.json()
     print(new_pois)
     return new_pois
+
 # Users fixtures for testing purposes
 @pytest.fixture
 def test_users(client): 
@@ -124,7 +125,6 @@ def test_comments(client_auth, test_user, test_pois): #  Authorized client neede
         "creator": test_user['id'],
         "id": 1,
         "created_at": "2022-03-01T13:40:14.440465+00:00",
-
     },
     {
         "comment": "test comment",
@@ -144,4 +144,29 @@ def test_comments(client_auth, test_user, test_pois): #  Authorized client neede
     new_comment2 = response.json()
     assert new_comment1['comment'] == comments_data[1]['comment']
     test_comments = [new_comment1, new_comment2]
+    #response2 = client_auth.get("/categories")
+    #test_comments = response2.json()
     return test_comments
+
+    
+@pytest.fixture()
+def test_categories(client_auth, test_user, test_pois): #  Authorized client needed to create 
+        categories_data = [{
+            "name": "North",
+            "creator": test_user['id']
+        },{
+            "name": "South",
+            "creator": test_user['id'],
+        }]
+        
+        response = client_auth.post("/categories", json=categories_data[0])
+        assert response.status_code == 201
+        print(response)
+        new_category1 = response.json()
+        assert new_category1['name'] == categories_data[0]['name']
+        response = client_auth.post("/categories", json=categories_data[1])
+        assert response.status_code == 201
+        new_category2 = response.json()
+        assert new_category2['name'] == categories_data[1]['name']
+        test_categories = [new_category1, new_category2]
+        return test_categories

@@ -1,3 +1,4 @@
+from unicodedata import category
 from fastapi import Depends, FastAPI
 import psycopg2
 from psycopg2.extras import RealDictCursor
@@ -8,7 +9,7 @@ from app.config import settings
 from . import models
 from .database import engine, get_db
 from passlib.context import CryptContext
-from .routers import poi, user, authenticate, likes, comments
+from .routers import poi, user, authenticate, likes, comments, categories
 from fastapi.middleware.cors import CORSMiddleware
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -35,6 +36,7 @@ app.include_router(user.router)
 app.include_router(authenticate.router)
 app.include_router(likes.router)
 app.include_router(comments.router)
+app.include_router(categories.router)
 
 @app.get("/sqlalchemy")
 def test_pois(db: Session = Depends(get_db)):

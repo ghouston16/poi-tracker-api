@@ -25,11 +25,23 @@ class UserLogin(BaseModel):
     email = EmailStr
     password = str
 
+# Category Model
+class Category(BaseModel):
+    name: str
+    creator: int
+
+# Response Model
+class CategoryOut(Category):
+    id: int
+    created_at: datetime
+    class Config: 
+        orm_mode = True
+
 # Poi Model
 class PoiBase(BaseModel):
     title: str
     description: str
-    category: str
+    category: Optional[int]
     lat: str
     lng: str
     published: bool = True
