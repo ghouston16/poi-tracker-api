@@ -1,13 +1,13 @@
 from typing import List
-from fastapi import Depends, FastAPI, Response, status, HTTPException, APIRouter
-from pydantic import BaseModel
+
+from fastapi import APIRouter, Depends, HTTPException, Response, status
+from passlib.context import CryptContext
 from sqlalchemy.orm import Session
+
+from app import oauth2
+
 from .. import models, schemas
 from ..database import get_db
-from passlib.context import CryptContext
-
-from app import database, oauth2
-
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

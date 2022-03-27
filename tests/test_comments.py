@@ -1,9 +1,4 @@
-from ast import List
-from random import randint
-from fastapi.testclient import TestClient
-from app.main import app
 from app import schemas
-import pytest
 
 
 # Test for unauthenticated attempt to comment on a poi

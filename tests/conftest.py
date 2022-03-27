@@ -1,18 +1,12 @@
-from unicodedata import category
-import py
 import pytest
-
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from app.main import app
-from app.database import get_db
-from app.database import Base
-import pytest
-from app import models, schemas
-from app.oauth2 import create_access_token
+
 from app.config import settings
+from app.database import Base, get_db
+from app.main import app
+from app.oauth2 import create_access_token
 
 SQLALCHEMY_DATABASE_URL = f"postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}_test"
 
@@ -136,8 +130,11 @@ def test_user2(client):
 # Comment fixtures for testing purposes
 @pytest.fixture()
 def test_comments(
-    client_auth, test_user, test_pois
-):  #  Authorized client needed to create
+    #  Authorized client needed to create
+    client_auth,
+    test_user,
+    test_pois,
+):
     comments_data = [
         {
             "comment": "test comment",
@@ -171,8 +168,11 @@ def test_comments(
 
 @pytest.fixture()
 def test_categories(
-    client_auth, test_user, test_pois
-):  #  Authorized client needed to create
+    #  Authorized client needed to create
+    client_auth,
+    test_user,
+    test_pois,
+):
     categories_data = [
         {"name": "North", "creator": test_user["id"]},
         {

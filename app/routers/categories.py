@@ -1,10 +1,11 @@
-from typing import List, Optional
-from fastapi import Depends, FastAPI, Response, status, HTTPException, APIRouter
-from sqlalchemy import func
-from sqlalchemy.orm import Session
-from .. import models, schemas, oauth2
-from ..database import get_db
+from typing import List
+
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from passlib.context import CryptContext
+from sqlalchemy.orm import Session
+
+from .. import models, oauth2, schemas
+from ..database import get_db
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -78,7 +79,9 @@ def delete_category(
     current_user: int = Depends(oauth2.get_current_user),
 ):
     if current_user:
-        find_category = db.query(models.Category).filter(models.Category.id == id)
+        find_category = (
+            db.query(models.Category).filter(models.Category.id == id)
+        )
         if find_category.first() == None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

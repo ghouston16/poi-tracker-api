@@ -1,10 +1,11 @@
-from typing import List, Optional
-from fastapi import Depends, FastAPI, Response, status, HTTPException, APIRouter
-from sqlalchemy import func
-from sqlalchemy.orm import Session
-from .. import models, schemas, oauth2
-from ..database import get_db
+from typing import List
+
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from passlib.context import CryptContext
+from sqlalchemy.orm import Session
+
+from .. import models, oauth2, schemas
+from ..database import get_db
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -53,7 +54,7 @@ def create_comments(
     status_code=status.HTTP_200_OK,
     response_model=List[schemas.CommentOut],
 )
-def get_comments(
+def get_poi_comments(
     poi_id: int,
     db: Session = Depends(get_db),
     current_user: int = Depends(oauth2.get_current_user),

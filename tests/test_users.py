@@ -1,9 +1,9 @@
-from fastapi.testclient import TestClient
-from app.main import app
 import pytest
 from jose import jwt
+
 from app import schemas
 from app.config import settings
+
 
 # Test for get All users route
 def test_get_all_users(client_auth):

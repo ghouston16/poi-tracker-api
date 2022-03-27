@@ -1,16 +1,10 @@
-from unicodedata import category
 from fastapi import Depends, FastAPI
-import psycopg2
-from psycopg2.extras import RealDictCursor
-import time
+from fastapi.middleware.cors import CORSMiddleware
+from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
-from app.config import settings
-from . import models
-from .database import engine, get_db
-from passlib.context import CryptContext
-from .routers import poi, user, authenticate, likes, comments, categories
-from fastapi.middleware.cors import CORSMiddleware
+from .database import get_db
+from .routers import authenticate, categories, comments, likes, poi, user
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

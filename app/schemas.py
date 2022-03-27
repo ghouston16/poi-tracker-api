@@ -1,13 +1,11 @@
-from unicodedata import category
-from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Optional
 
+from pydantic import BaseModel, EmailStr
 from pydantic.types import conint
 
-## User Models
 
-
+# User Models
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
