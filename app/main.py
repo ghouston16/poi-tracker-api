@@ -11,12 +11,13 @@ from .database import engine, get_db
 from passlib.context import CryptContext
 from .routers import poi, user, authenticate, likes, comments, categories
 from fastapi.middleware.cors import CORSMiddleware
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 app = FastAPI()
 
 # Obselete with Alembic
-#models.Base.metadata.create_all(bind=engine)
+# models.Base.metadata.create_all(bind=engine)
 
 # Change this to Web App URL
 origins = ["*"]
@@ -30,13 +31,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
- # Include Routers
+# Include Routers
 app.include_router(poi.router)
 app.include_router(user.router)
 app.include_router(authenticate.router)
 app.include_router(likes.router)
 app.include_router(comments.router)
 app.include_router(categories.router)
+
 
 @app.get("/sqlalchemy")
 def test_pois(db: Session = Depends(get_db)):
@@ -46,4 +48,3 @@ def test_pois(db: Session = Depends(get_db)):
 @app.get("/")
 def root():
     return {"message": "Welcome to my Python API"}
-

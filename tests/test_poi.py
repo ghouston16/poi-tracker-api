@@ -135,14 +135,14 @@ def test_update_poi_non_exist(client_auth, test_user, test_pois):
 
     assert res.status_code == 404
 
+
 def test_delete_non_exist_poi(client_auth, test_user, test_pois):
-    response = client_auth.delete(
-        f"/pois/{50000}")
+    response = client_auth.delete(f"/pois/{50000}")
 
     assert response.status_code == 404
 
+
 def test_get_non_exist_poi(client_auth, test_user, test_pois):
-    response = client_auth.get(
-        f"/pois/{50000}")
+    response = client_auth.get(f"/pois/{50000}")
 
     assert response.status_code == 404

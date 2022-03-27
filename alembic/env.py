@@ -13,7 +13,10 @@ from app.config import settings
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_main_option("sqlalchemy.url", f'postgresql+psycopg2://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}')
+config.set_main_option(
+    "sqlalchemy.url",
+    f"postgresql+psycopg2://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}",
+)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -24,7 +27,7 @@ fileConfig(config.config_file_name)
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 
-target_metadata =  Base.metadata # imported from models
+target_metadata = Base.metadata  # imported from models
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -70,9 +73,7 @@ def run_migrations_online():
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

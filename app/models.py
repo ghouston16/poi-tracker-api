@@ -19,27 +19,39 @@ class Poi(Base):
     description = Column(String, nullable=False)
     lat = Column(String, nullable=True)
     lng = Column(String, nullable=True)
-    category =  Column(Integer, nullable=True)
-    published = Column(Boolean, server_default='TRUE', nullable=False)
-    creator = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    created_at = Column(TIMESTAMP(timezone=True),
-                        nullable=False, server_default=text('now()'))
+    category = Column(Integer, nullable=True)
+    published = Column(Boolean, server_default="TRUE", nullable=False)
+    creator = Column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    created_at = Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
     # SQLAlchemy will recognise relationship once defined
     owner = relationship("User")
+
+
 # Define User model
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     email = Column(String, nullable=False, unique=True)
     password = Column(String, nullable=False)
-    created_at = Column(TIMESTAMP(timezone=True),
-                        nullable=False, server_default=text('now()'))
+    created_at = Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
 
-# Likes model added 
+
+# Likes model added
 class Like(Base):
-    __tablename__= "likes"
-    user_id= Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
-    poi_id= Column(Integer,ForeignKey("pois.id", ondelete="CASCADE"), primary_key=True)
+    __tablename__ = "likes"
+    user_id = Column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    poi_id = Column(
+        Integer, ForeignKey("pois.id", ondelete="CASCADE"), primary_key=True
+    )
+
 
 # Comment Model
 class Comment(Base):
@@ -47,13 +59,17 @@ class Comment(Base):
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     comment = Column(String, nullable=False)
     poi_id = Column(Integer, ForeignKey("pois.id", ondelete="CASCADE"), nullable=False)
-    published = Column(Boolean, server_default='TRUE', nullable=False)
-    creator = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    created_at = Column(TIMESTAMP(timezone=True),
-                        nullable=False, server_default=text('now()'))
+    published = Column(Boolean, server_default="TRUE", nullable=False)
+    creator = Column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    created_at = Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
     # SQLAlchemy will recognise relationship once defined
     parent = relationship("Poi")
     owner = relationship("User")
+
 
 # Category Model
 class Category(Base):
@@ -61,5 +77,6 @@ class Category(Base):
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     name = Column(String, nullable=False)
     creator = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=True)
-    created_at = Column(TIMESTAMP(timezone=True),
-                        nullable=False, server_default=text('now()'))
+    created_at = Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
