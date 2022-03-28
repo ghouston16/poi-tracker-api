@@ -84,9 +84,6 @@ jobs:
         run: |
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
           docker build . -f Dockerfile --tag ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
-      - name: Run container
-        run: |
-          docker run ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
       - name: Pytest
         run: docker exec python-poi-api python -m pytest .
       - name: Flake8
