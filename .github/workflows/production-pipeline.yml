@@ -82,7 +82,7 @@ jobs:
           password: ${{ secrets.GH_TOKEN }}
       - name: Build image
         run: |
-          echo ${secrets.GH_TOKEN} | docker login -u ${secrets.GH_ACTOR} --password-stdin docker.pkg.github.com
+          echo ${env.GITHUB_TOKEN} | docker login -u ${secrets.GH_ACTOR} --password-stdin docker.pkg.github.com
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
           docker build . -f Dockerfile --tag ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
       - name: Run Container
