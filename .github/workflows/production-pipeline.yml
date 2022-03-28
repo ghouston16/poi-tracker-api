@@ -30,14 +30,14 @@ jobs:
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: ${{ env.REPOSITORY }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
           push: true
-          tags: ${{ env.REPOSITORY }}:latest
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
           labels: ${{ steps.meta.outputs.labels }}
   # https://testdriven.io/courses/tdd-fastapi/continuous-integration/ 
   test:
@@ -82,16 +82,18 @@ jobs:
           password: ${{ secrets.GH_TOKEN }}
       - name: Build image
         run: |
-          docker pull ${{ env.REGISTRY }}:latest
-          docker build . -f Dockerfile --tag ${{ env.REGISTRY }}:latest
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
+          docker build . -f Dockerfile --tag ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
+      - name: Run Container
+        run: docker run ${{ env.REGISTRY }}/${{ env.IMAGE }}
       - name: Pytest
-        run: docker exec python-poi-api python -m pytest .
+        run: docker exec ${{ env.REGISTRY }}/python-poi-api python -m pytest .
       - name: Flake8
-        run: docker exec python-poi-api -m flake8 .
+        run: docker exec ${{ env.REGISTRY }}/python-poi-api -m flake8 .
       - name: Black
-        run: docker exec python-poi-api -m black . --check
+        run: docker exec ${{ env.REGISTRY }}/python-poi-api -m black . --check
       - name: isort
-        run: docker exec python-poi-api -m isort . --check-only
+        run: docker exec ${{ env.REGISTRY }}/python-poi-api -m isort . --check-only
 
   deploy:
     name: Deploy to Heroku
@@ -118,7 +120,7 @@ jobs:
           docker pull ${{ env.IMAGE }}:latest || true
       - name: Build image
         run: |
-            docker build ${{ env.REGISTRY }}:latest  --tag registry.heroku.com/python-poi-api/web --file Dockerfile
+            docker build ${{ env.REGISTRY }}/{{ env.IMAGE}}:latest  --tag registry.heroku.com/python-poi-api/web --file Dockerfile
       - name: Log in to the Heroku Container Registry
         run: docker login -u _ -p ${secrets.HEROKU_API_KEY} registry.heroku.com
         env:
