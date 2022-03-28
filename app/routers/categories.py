@@ -79,9 +79,7 @@ def delete_category(
     current_user: int = Depends(oauth2.get_current_user),
 ):
     if current_user:
-        find_category = (
-            db.query(models.Category).filter(models.Category.id == id)
-        )
+        find_category = db.query(models.Category).filter(models.Category.id == id)
         if find_category.first() == None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
