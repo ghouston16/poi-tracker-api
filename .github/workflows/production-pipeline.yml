@@ -10,7 +10,7 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
-
+ 
   build:
     name: Build Docker Image
     runs-on: ubuntu-latest
