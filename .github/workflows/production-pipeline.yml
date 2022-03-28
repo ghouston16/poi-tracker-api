@@ -30,7 +30,7 @@ jobs:
           password: ${{ secrets.GH_TOKEN }}
       - name: Push image
         run: |
-          echo ${{ secrets.GH_TOKEN}} | docker push ${{ env.IMAGE }}:latest --password-stdin docker.pkg.github.com
+          echo ${{ secrets.GH_TOKEN}} | docker push ${{ env.IMAGE }}:latest
 
   test:
     name: Test Docker Image
