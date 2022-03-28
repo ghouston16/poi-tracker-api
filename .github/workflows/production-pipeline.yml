@@ -57,7 +57,7 @@ jobs:
           password: ${{ secrets.GH_TOKEN }}
       - name: Build image
         run: |
-          docker build docker build ${{ env.IMAGE}}:latest -f Dockerfile --tag registry.heroku.com/python-poi-api/web    
+          docker build ${{ env.IMAGE}}:latest -f Dockerfile --tag registry.heroku.com/python-poi-api/web
       - name: Run container
         run: |
           docker run \
