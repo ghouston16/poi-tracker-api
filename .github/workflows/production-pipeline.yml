@@ -82,7 +82,7 @@ jobs:
           password: ${{ secrets.GH_TOKEN }}
       - name: Build image
         run: |
-          docker pull
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
           docker build . -f Dockerfile --tag ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
       - name: Run container
         run: |
