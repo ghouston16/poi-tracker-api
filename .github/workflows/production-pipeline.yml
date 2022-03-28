@@ -57,7 +57,7 @@ jobs:
           password: ${{ secrets.GH_TOKEN }}
       - name: Build image
         run: |
-          docker build --cache-from ${{ env.REGISTRY }}/{{ env.IMAGE }}:latest --tag ${{ env.IMAGE }}:latest --file ./Dockerfile 
+          docker build . -f ./Dockerfile  --tag ${{ env.IMAGE }}:latest
       - name: Run container
         run: |
           docker run \
