@@ -63,6 +63,7 @@ jobs:
         env:
           POSTGRES_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
           POSTGRES_DB: ${{secrets.DATABASE_NAME}}_test
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         ports:
           - 5432:5432
         options: >-
@@ -81,6 +82,7 @@ jobs:
           password: ${{ secrets.GH_TOKEN }}
       - name: Build image
         run: |
+          echo ${env.GITHUB_TOKEN} | docker login -u ${secrets.GITHUB_ACTOR} --password-stdin docker.pkg.github.com
           docker build . -f ./Dockerfile  --tag ${{ env.IMAGE }}:latest
       - name: Run container
         run: |
