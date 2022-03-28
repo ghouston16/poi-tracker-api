@@ -4,6 +4,7 @@ from sqlalchemy import engine_from_config, pool
 
 from alembic import context
 from app.config import settings
+
 # Import Base for database.py to access SQL models
 from app.models import Base
 
