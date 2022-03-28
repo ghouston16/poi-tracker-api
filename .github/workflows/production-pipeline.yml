@@ -30,7 +30,7 @@ jobs:
           docker build . -f Dockerfile.prod --tag ${{ env.IMAGE }}:latest \
       - name: Push image
         run: |
-          docker push ${{ env.IMAGE }}:latest
+          docker push ${{ env.IMAGE }}:latest 
 
   test:
     name: Test Docker Image
