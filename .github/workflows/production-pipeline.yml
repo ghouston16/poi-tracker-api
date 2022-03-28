@@ -54,7 +54,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.GH_ACTOR }}
-          password: ${{ secrets.GH_TOKEN }}}
+          password: ${{ secrets.GH_TOKEN }}
       - name: Build image
         run: |
           docker build \
@@ -85,6 +85,8 @@ jobs:
     name: Deploy to Heroku
     runs-on: ubuntu-latest
     needs: [build, test]
+    environment:
+      name: production
     env:
       HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
       HEROKU_REGISTRY_IMAGE: registry.heroku.com/python-poi-api
