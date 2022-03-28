@@ -6,7 +6,7 @@ on:
       - feature/production-pipeline.yml
 
 env:
-  IMAGE: docker.pkg.github.com/ghouston16/poi-tracker-api/python-poi-api
+  IMAGE: docker.pkg.github.com/ghouston16/python-poi-api
   REGISTRY: ghcr.io
 
 jobs:
@@ -39,7 +39,6 @@ jobs:
           push: true
           tags: latest
           labels: ${{ steps.meta.outputs.labels }}
-          owner: ${{ secrets.GH_ACTOR }}
 
   test:
     name: Test Docker Image
