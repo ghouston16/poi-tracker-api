@@ -84,15 +84,7 @@ jobs:
           docker build . -f ./Dockerfile  --tag ${{ env.IMAGE }}:latest
       - name: Run container
         run: |
-          docker run \
-            -d \
-            --name python-poi-api \
-            -e PORT=8765 \
-            -e ENVIRONMENT=dev \
-            -e DATABASE_URL=sqlite://sqlite.db \
-            -e DATABASE_TEST_URL=sqlite://sqlite.db \
-            -p 5003:8765 \
-            ${{ env.IMAGE }}:latest
+          docker run ${{ env.IMAGE }}:latest
       - name: Pytest
         run: docker exec python-poi-api python -m pytest .
       - name: Flake8
