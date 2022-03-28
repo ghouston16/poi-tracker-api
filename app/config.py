@@ -11,13 +11,7 @@ class Settings(BaseSettings):
     algorithm: str
     access_token_expire_minutes: int
     database_url: str
-    prod_database_hostname: str
-    prod_database_port: str
-    prod_database_password: str
-    prod_database_username: str
-    prod_database_name: str
-    prod_database_url: str
-
+    
     class Config:
         env_file = ".env"
 
