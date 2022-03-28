@@ -52,14 +52,14 @@ jobs:
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
+          username: ${{ secrets.GH_ACTOR }}
           password: ${{ secrets.GH_TOKEN }}}
       - name: Build image
         run: |
           docker build \
             --cache-from ${{ env.IMAGE }}:latest \
             --tag ${{ env.IMAGE }}:latest \
-            --file ./Dockerfile.prod \
+            --file ./Dockerfile \
       - name: Run container
         run: |
           docker run \
