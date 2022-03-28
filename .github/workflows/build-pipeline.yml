@@ -66,4 +66,11 @@ jobs:
         - name: test with pytest
           run: |
             pip install pytest
-            pytest
+            python -m pytest --cov="." --cov-fail-under=80
+        - name: Code Linting Check
+          run: flake8 . --ignore E711,E302,F541,E712,W291
+        - name: code quality check
+          run: black . --check
+        - name: dependency sort check
+          run: isort . --check-only
+
