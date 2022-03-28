@@ -45,7 +45,37 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
+      name: production  test:
+    name: Test Docker Image
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
       name: production
+    env:
+      DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
+      DATABASE_PORT: ${{secrets.DATABASE_PORT}}
+      DATABASE_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
+      DATABASE_NAME: ${{secrets.DATABASE_NAME}}
+      DATABASE_USERNAME: ${{secrets.DATABASE_USERNAME}}
+      SECRET_KEY: ${{secrets.SECRET_KEY}}
+      ALGORITHM: ${{secrets.ALGORITHM}}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
+      DATABASE_URL: ${{secrets.DATABASE_URL}}
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
+          POSTGRES_DB: ${{secrets.DATABASE_NAME}}_test
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - name: Checkout
         uses: actions/checkout@v2.4.0
@@ -57,18 +87,11 @@ jobs:
           password: ${{ secrets.GH_TOKEN }}
       - name: Build image
         run: |
-          docker build --cache-from ${{ env.REGISTRY }}/{{ env.IMAGE }}:latest --tag ${{ env.IMAGE }}:latest --file ./Dockerfile 
+          docker pull
+          docker build . -f Dockerfile --tag ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
       - name: Run container
         run: |
-          docker run \
-            -d \
-            --name python-poi-api \
-            -e PORT=8765 \
-            -e ENVIRONMENT=dev \
-            -e DATABASE_URL=sqlite://sqlite.db \
-            -e DATABASE_TEST_URL=sqlite://sqlite.db \
-            -p 5003:8765 \
-            ${{ env.IMAGE }}:latest
+          docker run 
       - name: Pytest
         run: docker exec python-poi-api python -m pytest .
       - name: Flake8
@@ -103,7 +126,7 @@ jobs:
           docker pull ${{ env.IMAGE }}:latest || true
       - name: Build image
         run: |
-            docker build ${{ env.REGISTRY }}/{{ env.IMAGE}}:latest -f Dockerfile --tag registry.heroku.com/python-poi-api/web     
+            docker build ${{ env.REGISTRY }}/{{ env.IMAGE}}:latest  --tag registry.heroku.com/python-poi-api/web --file Dockerfile
       - name: Log in to the Heroku Container Registry
         run: docker login -u _ -p ${secrets.HEROKU_API_KEY} registry.heroku.com
         env:
