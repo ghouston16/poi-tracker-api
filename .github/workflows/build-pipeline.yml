@@ -73,6 +73,4 @@ jobs:
           run: black . --check
         - name: dependency sort check
           run: isort . --check-only
-        - name: git push origin develop
-          run: git push origin/develop
 
