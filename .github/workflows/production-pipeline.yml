@@ -6,7 +6,7 @@ on:
       - feature/production-pipeline.yml
 
 env:
-  IMAGE: docker.pkg.github.com/$(echo $GH_REPOSITORY | tr '[A-Z]' '[a-z]')/python-poi-api
+  IMAGE: docker.pkg.github.com/$(echo $GH_REPOSITORY | tr '[A-Z]' '[a-z]')
   REGISTRY: ghcr.io
 
 jobs:
