@@ -39,6 +39,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          owner: ${{ secrets.GH_ACTOR }}
 
   test:
     name: Test Docker Image
