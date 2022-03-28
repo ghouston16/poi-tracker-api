@@ -1,8 +1,4 @@
-from random import randint
-from fastapi.testclient import TestClient
-from app.main import app
 from app import schemas
-import pytest
 
 
 # Test for unauthenticated attempt to create POI
@@ -109,7 +105,7 @@ def test_update_poi(client_auth, test_pois, test_user):
 
 
 # Test Delete POI - No Atuh
-def test_delete_poi(client, test_pois):
+def test_delete_poi_no_auth(client):
     response = client.delete("/pois/1")
     assert response.status_code == 401
 
@@ -135,14 +131,14 @@ def test_update_poi_non_exist(client_auth, test_user, test_pois):
 
     assert res.status_code == 404
 
+
 def test_delete_non_exist_poi(client_auth, test_user, test_pois):
-    response = client_auth.delete(
-        f"/pois/{50000}")
+    response = client_auth.delete(f"/pois/{50000}")
 
     assert response.status_code == 404
 
+
 def test_get_non_exist_poi(client_auth, test_user, test_pois):
-    response = client_auth.get(
-        f"/pois/{50000}")
+    response = client_auth.get(f"/pois/{50000}")
 
     assert response.status_code == 404
