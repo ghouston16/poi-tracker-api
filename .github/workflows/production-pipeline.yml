@@ -30,14 +30,14 @@ jobs:
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: ${{ env.REGISTRY }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
           push: true
-          tags: ${{ env.REGISTRY }}:latest 
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
           labels: ${{ steps.meta.outputs.labels }}
   # https://testdriven.io/courses/tdd-fastapi/continuous-integration/ 
   test:
@@ -57,21 +57,10 @@ jobs:
           password: ${{ secrets.GH_TOKEN }}
       - name: Build image
         run: |
-          docker pull ${{ env.REGISTRY }}:latest
-          docker build . -f Dockerfile --tag ${{ env.REGISTRY }}:latest
-      - name: Run container
-        run: |
-          docker run \
-            -d \
-            --name fastapi-tdd \
-            -e PORT=8765 \
-            -e ENVIRONMENT=dev \
-            -e DATABASE_URL=sqlite://sqlite.db \
-            -e DATABASE_TEST_URL=sqlite://sqlite.db \
-            -p 5003:8765 \
-            ${{env.REPOSITORY}}/{{ env.IMAGE }}:latest
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
+          docker build . -f Dockerfile --tag ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
       - name: Run Container
-        run: docker run ${{ env.REGISTRY }}/${{ env.IMAGE }}
+        run: docker run ${{ env.REGISTRY }}/${{ env.IMAGE }} -d --name python-poi-api -e PORT=8765 -e ENVIRONMENT=dev -e DATABASE_URL=sqlite://sqlite.db -e DATABASE_TEST_URL=sqlite://sqlite.db -p 5003:8765 ${{env.REPOSITORY}}/{{ env.IMAGE }}:latest
       - name: Pytest
         run: docker exec ${{ env.REGISTRY }}/python-poi-api python -m pytest .
       - name: Flake8
