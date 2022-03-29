@@ -30,17 +30,15 @@ jobs:
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: ${{ env.IMAGE }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
           push: true
-          tags: ${{ env.IMAGE }}:latest
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
           labels: ${{ steps.meta.outputs.labels }}
-          username: ${{ secrets.GH_ACTOR }}
-          password: ${{ secrets.GH_TOKEN }}
   # https://testdriven.io/courses/tdd-fastapi/continuous-integration/ 
   test:
     name: Test Docker Image
@@ -83,15 +81,15 @@ jobs:
           password: ${{ secrets.GH_TOKEN }}
       - name: Build image
         run: |
-          docker pull ${{ env.IMAGE }}:latest
-          docker build . -f Dockerfile --tag ${{ env.IMAGE }}:latest
-        # - name: Run Container
-        # run: docker run ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest #-e ENVIRONMENT=dev -e DATABASE_URL=${{secrets.DATABASE_URL}} -e DATABASE_HOSTNAME=${{secrets.DATABASE_HOSTNAME}} -e DATABASE_PORT=${{secrets.DATABASE_PORT}} -e DATABASE_PASSWORD=${{secrets.DATABASE_PASSWORD}} -e DATABASE_NAME= ${{secrets.DATABASE_NAME}} -e DATABASE_USERNAME= ${{secrets.DATABASE_USERNAME}} -e SECRET_KEY=${{secrets.SECRET_KEY}} -e ALGORITHM=${{secrets.ALGORITHM}} -e ACCESS_TOKEN_EXPIRE_MINUTES=${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}} -p 5432:5432 ubuntu env
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
+          docker build . -f Dockerfile --tag ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
+      - name: Run Container
+        run: docker run ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest #-e ENVIRONMENT=dev DATABASE_URL=${{secrets.DATABASE_URL}} DATABASE_HOSTNAME=${{secrets.DATABASE_HOSTNAME}} DATABASE_PORT=${{secrets.DATABASE_PORT}} DATABASE_PASSWORD=${{secrets.DATABASE_PASSWORD}} -e DATABASE_NAME= ${{secrets.DATABASE_NAME}} DATABASE_USERNAME= ${{secrets.DATABASE_USERNAME}} SECRET_KEY=${{secrets.SECRET_KEY}} ALGORITHM=${{secrets.ALGORITHM}} ACCESS_TOKEN_EXPIRE_MINUTES=${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}} -p 5432:5432
       - name: Pytest
-        run: docker exec python-poi-api python -m pytest .
+        run: docker exec ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest python -m pytest .
       - name: Flake8
-        run: docker exec ${{ env.REGISTRY }}/python-poi-api -m flake8 .
+        run: docker exec ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest -m flake8 .
       - name: Black
-        run: docker exec ${{ env.REGISTRY }}/python-poi-api -m black . --check
+        run: docker exec ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest -m black . --check
       - name: isort
-        run: docker exec ${{ env.REGISTRY }}/python-poi-api -m isort . --check-only
+        run: docker exec ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest -m isort . --check-only
