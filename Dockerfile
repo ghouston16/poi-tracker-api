@@ -2,6 +2,9 @@ FROM python:3.9.7
 
 WORKDIR /usr/src/app
 
+# create the app user
+RUN addgroup --system app && adduser --system --group app
+
 ENV APP_HOME=/usr/src/app/web
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
