@@ -30,14 +30,14 @@ jobs:
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE }}
+          images: ${{ env.IMAGE }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
+          tags: ${{ env.IMAGE }}:latest
           labels: ${{ steps.meta.outputs.labels }}
   # https://testdriven.io/courses/tdd-fastapi/continuous-integration/ 
   test:
@@ -81,8 +81,8 @@ jobs:
           password: ${{ secrets.GH_TOKEN }}
       - name: Build image
         run: |
-          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
-          docker build . -f Dockerfile --tag ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
+          docker pull ${{ env.IMAGE }}:latest
+          docker build . -f Dockerfile --tag ${{ env.IMAGE }}:latest
         # - name: Run Container
         # run: docker run ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest #-e ENVIRONMENT=dev -e DATABASE_URL=${{secrets.DATABASE_URL}} -e DATABASE_HOSTNAME=${{secrets.DATABASE_HOSTNAME}} -e DATABASE_PORT=${{secrets.DATABASE_PORT}} -e DATABASE_PASSWORD=${{secrets.DATABASE_PASSWORD}} -e DATABASE_NAME= ${{secrets.DATABASE_NAME}} -e DATABASE_USERNAME= ${{secrets.DATABASE_USERNAME}} -e SECRET_KEY=${{secrets.SECRET_KEY}} -e ALGORITHM=${{secrets.ALGORITHM}} -e ACCESS_TOKEN_EXPIRE_MINUTES=${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}} -p 5432:5432 ubuntu env
       - name: Pytest
