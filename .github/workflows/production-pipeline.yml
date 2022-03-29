@@ -39,6 +39,8 @@ jobs:
           push: true
           tags: ${{ env.IMAGE }}:latest
           labels: ${{ steps.meta.outputs.labels }}
+          username: ${{ secrets.GH_ACTOR }}
+          password: ${{ secrets.GH_TOKEN }}
   # https://testdriven.io/courses/tdd-fastapi/continuous-integration/ 
   test:
     name: Test Docker Image
