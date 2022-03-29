@@ -84,7 +84,7 @@ jobs:
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
           docker build . -f Dockerfile --tag ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
       - name: Run Container
-        run: docker run ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest --env DATABASE_URL=${{secrets.DATABASE_URL}} DATABASE_HOSTNAME=${{secrets.DATABASE_HOSTNAME}} DATABASE_PORT=${{secrets.DATABASE_PORT}} DATABASE_PASSWORD=${{secrets.DATABASE_PASSWORD}} DATABASE_NAME= ${{secrets.DATABASE_NAME}} DATABASE_USERNAME= ${{secrets.DATABASE_USERNAME}} SECRET_KEY=${{secrets.SECRET_KEY}} ALGORITHM=${{secrets.ALGORITHM}} ACCESS_TOKEN_EXPIRE_MINUTES =${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}} -p 5432:5432
+        run: docker run ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest -e DATABASE_URL=${{secrets.DATABASE_URL}} DATABASE_HOSTNAME=${{secrets.DATABASE_HOSTNAME}} DATABASE_PORT=${{secrets.DATABASE_PORT}} DATABASE_PASSWORD=${{secrets.DATABASE_PASSWORD}} DATABASE_NAME= ${{secrets.DATABASE_NAME}} DATABASE_USERNAME= ${{secrets.DATABASE_USERNAME}} SECRET_KEY=${{secrets.SECRET_KEY}} ALGORITHM=${{secrets.ALGORITHM}} ACCESS_TOKEN_EXPIRE_MINUTES =${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}} -p 5432:5432
       - name: Pytest
         run: docker exec ${{ env.REGISTRY }}/python-poi-api python -m pytest .
       - name: Flake8
