@@ -82,7 +82,7 @@ jobs:
       - name: Build image
         run: |
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
-          docker build . -f Dockerfile.dev --tag ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
+          docker build . -f Dockerfile --tag ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
       - name: Run Container
         run: docker run ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest #-d --name python-poi-api -e PORT=8765 -e ENVIRONMENT=dev -e DATABASE_URL=sqlite://sqlite.db -e DATABASE_TEST_URL=sqlite://sqlite.db -p 5003:8765 ${{env.REPOSITORY}}/{{ env.IMAGE }}:latest
       - name: Pytest
