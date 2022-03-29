@@ -2,6 +2,10 @@ FROM python:3.9.7
 
 WORKDIR /usr/src/app
 
+ENV APP_HOME=/usr/src/app/web
+RUN mkdir $APP_HOME
+WORKDIR $APP_HOME
+
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -22,5 +26,11 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+
+# chown all the files to the app user
+RUN chown -R app:app $APP_HOME
+
+# change to the app user
+USER app
 
 CMD ["uvicorn", "app.main:app", "--port", "8000" ]
