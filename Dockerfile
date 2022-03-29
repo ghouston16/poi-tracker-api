@@ -5,12 +5,12 @@ WORKDIR /usr/src/app
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-ENV ENVIRONMENT prod
+ENV ENVIRONMENT dev
 ENV TESTING 0
 
 COPY requirements.txt ./
 
-#RUN chmod +x dev.txt
+RUN chmod +x dev.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
