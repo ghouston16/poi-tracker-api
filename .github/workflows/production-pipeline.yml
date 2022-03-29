@@ -46,32 +46,6 @@ jobs:
     needs: build
     environment:
       name: poi-tracker-fastapi
-    env:
-      DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
-      DATABASE_PORT: 5432
-      DATABASE_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
-      DATABASE_NAME: ${{secrets.DATABASE_NAME}}
-      DATABASE_USERNAME: ${{secrets.DATABASE_USERNAME}}
-      SECRET_KEY: ${{secrets.SECRET_KEY}}
-      ALGORITHM: ${{secrets.ALGORITHM}}
-      ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
-      DATABASE_URL: ${{secrets.DATABASE_URL}}
-
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
-          POSTGRES_DB: ${{secrets.DATABASE_NAME}}_test
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          GH_ACTOR: ${{ secrets.GH_ACTOR }}
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     steps:
       - name: Checkout
         uses: actions/checkout@v2.4.0
@@ -85,6 +59,17 @@ jobs:
         run: |
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
           docker build . -f Dockerfile --tag ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
+      - name: Run container
+        run: |
+          docker run \
+            -d \
+            --name fastapi-tdd \
+            -e PORT=8765 \
+            -e ENVIRONMENT=dev \
+            -e DATABASE_URL=sqlite://sqlite.db \
+            -e DATABASE_TEST_URL=sqlite://sqlite.db \
+            -p 5003:8765 \
+            ${{env.REPOSITORY}}/{{ env.IMAGE }}:latest
       - name: Run Container
         run: docker run ${{ env.REGISTRY }}/${{ env.IMAGE }}
       - name: Pytest
