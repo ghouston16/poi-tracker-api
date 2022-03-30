@@ -5,7 +5,7 @@ services:
     image: postgres
     environment:
       - POSTGRES_PASSWORD=Expires21!!
-      - POSTGRES_DB=poi_api_db_test
+      - POSTGRES_DB=poi_api_db
     ports:
       - 5432:5432
     volumes:
@@ -23,7 +23,7 @@ services:
       - DATABASE_HOSTNAME=postgres
       - DATABASE_PORT=5432
       - DATABASE_PASSWORD=Expires21!!
-      - DATABASE_NAME=poi_api_db_test
+      - DATABASE_NAME=poi_api_db
       - DATABASE_USERNAME=postgres
       - SECRET_KEY=09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7
       - ALGORITHM=HS256
