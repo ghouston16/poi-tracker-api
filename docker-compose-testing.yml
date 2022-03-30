@@ -1,0 +1,33 @@
+version: "3"
+services:
+  api-test:
+    container_name: api-test
+    build: .
+    ports:
+      - 8000:8000
+    volumes:
+      - ./:/usr/src/app
+
+    environment:
+      - DATABASE_HOSTNAME=${PROD_DATABASE_HOSTNAME}
+      - DATABASE_PORT=${PROD_DATABASE_PORT}
+      - DATABASE_PASSWORD=${PROD_DATABASE_PASSWORD}
+      - DATABASE_NAME=${PROD_DATABASE_NAME}
+      - DATABASE_USERNAME=${PROD_DATABASE_USERNAME}
+      - SECRET_KEY=${SECRET_KEY}
+      - ALGORITHM=${ALGORITHM}
+      - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES}
+    command: pytest .
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+
+volumes:
+  postgres-db:
