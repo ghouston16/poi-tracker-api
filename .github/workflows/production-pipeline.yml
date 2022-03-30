@@ -86,7 +86,7 @@ jobs:
       - name: Run test
         run: |
           echo --- Running test cases ---
-          docker-compose -f ./<REPO_NAME>/docker-compose-test.yml up --build --exit-code-from api-test
+          docker-compose -f docker-compose-test.yml up --build --exit-code-from api-test
           echo --- Completed test cases ---
       #- name: Run Container
       #  run: docker run --name  ${{ env.IMAGE }}:latest #-e ENVIRONMENT=dev DATABASE_URL=${{secrets.DATABASE_URL}} DATABASE_HOSTNAME=${{secrets.DATABASE_HOSTNAME}} DATABASE_PORT=${{secrets.DATABASE_PORT}} DATABASE_PASSWORD=${{secrets.DATABASE_PASSWORD}} -e DATABASE_NAME= ${{secrets.DATABASE_NAME}} DATABASE_USERNAME= ${{secrets.DATABASE_USERNAME}} SECRET_KEY=${{secrets.SECRET_KEY}} ALGORITHM=${{secrets.ALGORITHM}} ACCESS_TOKEN_EXPIRE_MINUTES=${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}} -p 5432:5432
