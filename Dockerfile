@@ -36,4 +36,4 @@ RUN chown -R app:app $APP_HOME
 # change to the app user
 USER app
 
-CMD ["uvicorn", "app.main:app", "--port", "8000" ]
+CMD ["pytest","uvicorn", "app.main:app", "--port", "8000" ]
