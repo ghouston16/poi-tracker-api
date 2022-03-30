@@ -89,7 +89,7 @@ jobs:
       #    docker-compose -f docker-compose-test.yml up --build --exit-code-from api-test
       #    echo --- Completed test cases ---
       - name: Run Container
-        run: docker run -d --name python-poi-api ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest -e DATABASE_URL=sqlite://sqlite.db -p 5003:8765 #-e ENVIRONMENT=dev DATABASE_URL=${{secrets.DATABASE_URL}} DATABASE_HOSTNAME=${{secrets.DATABASE_HOSTNAME}} DATABASE_PORT=${{secrets.DATABASE_PORT}} DATABASE_PASSWORD=${{secrets.DATABASE_PASSWORD}} -e DATABASE_NAME= ${{secrets.DATABASE_NAME}} DATABASE_USERNAME= ${{secrets.DATABASE_USERNAME}} SECRET_KEY=${{secrets.SECRET_KEY}} ALGORITHM=${{secrets.ALGORITHM}} ACCESS_TOKEN_EXPIRE_MINUTES=${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}} -p 5432:5432
+        run: docker run -d --name python-poi-api ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest #-e DATABASE_URL=sqlite://sqlite.db -p 5003:8765 #-e ENVIRONMENT=dev DATABASE_URL=${{secrets.DATABASE_URL}} DATABASE_HOSTNAME=${{secrets.DATABASE_HOSTNAME}} DATABASE_PORT=${{secrets.DATABASE_PORT}} DATABASE_PASSWORD=${{secrets.DATABASE_PASSWORD}} -e DATABASE_NAME= ${{secrets.DATABASE_NAME}} DATABASE_USERNAME= ${{secrets.DATABASE_USERNAME}} SECRET_KEY=${{secrets.SECRET_KEY}} ALGORITHM=${{secrets.ALGORITHM}} ACCESS_TOKEN_EXPIRE_MINUTES=${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}} -p 5432:5432
       - name: Pytest
         run: docker exec python-poi-api pytest .
       - name: Flake8
