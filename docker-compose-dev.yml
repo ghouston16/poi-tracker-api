@@ -4,6 +4,8 @@ services:
     build: .
     ports:
       - 8000:8000
+    volumes:
+      - ./:/usr/src/app
 
     environment:
       - DATABASE_HOSTNAME=${PROD_DATABASE_HOSTNAME}
@@ -14,7 +16,7 @@ services:
       - SECRET_KEY=${SECRET_KEY}
       - ALGORITHM=${ALGORITHM}
       - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES}
-
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     depends_on:
       - postgres
 
