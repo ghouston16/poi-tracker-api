@@ -24,6 +24,10 @@ ENV ALGORITHM=HS256
 ENV ACCESS_TOKEN_EXPIRE_MINUTES=30
 ENV DATABASE_URL=postgresql://postgres:Expires21!!@postgres:5432/poi_api_db
 
+RUN apt-get update \
+  && apt-get -y install netcat gcc postgresql \
+  && apt-get clean
+
 COPY requirements.txt ./
 
 RUN pip install --no-cache-dir -r requirements.txt
