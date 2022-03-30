@@ -17,7 +17,7 @@ services:
       - SECRET_KEY=${SECRET_KEY}
       - ALGORITHM=${ALGORITHM}
       - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES}
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    command: pytest . #uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     depends_on:
       - postgres
 
@@ -25,7 +25,7 @@ services:
     image: postgres
     environment:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_DB=${DATABASE_NAME}_test
     volumes:
       - postgres-db:/var/lib/postgresql/data
 
