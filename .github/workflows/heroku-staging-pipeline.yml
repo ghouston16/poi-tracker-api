@@ -1,9 +1,9 @@
-name: Build, Test and Deploy Code
+name: Build, Test and Stage Code
 
 on: 
   push:
     branches:
-      - master
+      - develop
 
 jobs:
   build:
@@ -42,7 +42,7 @@ jobs:
         image: postgres
         env:
           POSTGRES_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
-          POSTGRES_DB: ${{secrets.DATABASE_NAME}}_test
+          POSTGRES_DB: ${{secrets.DATABASE_NAME}}
         ports:
           - 5432:5432
         options: >-
@@ -65,7 +65,13 @@ jobs:
         - name: test with pytest
           run: |
             pip install pytest
-            pytest
+            python -m pytest --cov="." --cov-fail-under=80
+        - name: Flake8
+          run: flake8 . --ignore E711,E302,F541,E712,W291
+        - name: Black - code quality check
+          run: black . --check
+        - name: Isort check
+          run: isort . --check-only
 
   deploy:
     runs-on: ubuntu-latest
