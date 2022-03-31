@@ -3,7 +3,7 @@ name: Build, Test and Stage Code
 on: 
   push:
     branches:
-      - master
+      - develop
 
 jobs:
   build:
