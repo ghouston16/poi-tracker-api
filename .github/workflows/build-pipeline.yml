@@ -3,7 +3,7 @@ name: Build-Verify
 on: 
   push:
     branches:
-      #- develop
+      - develop
       - feature/*    
      
 # Comment to test new pipeline

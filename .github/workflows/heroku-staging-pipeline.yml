@@ -1,9 +1,9 @@
-name: Build, Test and Stage Code
+name: Build, Test and Deploy Code - Staging
 
 on: 
   push:
     branches:
-      - develop
+      - master
 
 jobs:
   build:
@@ -75,7 +75,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [build]
+    needs: [build, build-test]
     environment:
         name: production
     steps:
