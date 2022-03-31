@@ -1,4 +1,4 @@
-name: Build, Test and Stage Code
+name: Build, Test and Deploy Code - Staging
 
 on: 
   push:
