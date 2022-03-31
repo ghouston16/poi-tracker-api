@@ -23,10 +23,7 @@ ENV SECRET_KEY=09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7
 ENV ALGORITHM=HS256
 ENV ACCESS_TOKEN_EXPIRE_MINUTES=30
 ENV DATABASE_URL=postgresql://postgres:Expires21!!@postgres:5432/poi_api_db
-
-RUN apt-get update \
-  && apt-get -y install netcat gcc postgresql \
-  && apt-get clean
+#ENV PYTEST_ADDOPTS='-p no:cacheprovider'
 
 COPY requirements.txt ./
 
