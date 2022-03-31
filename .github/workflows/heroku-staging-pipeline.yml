@@ -50,7 +50,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-          
+
     runs-on: ubuntu-latest
     steps:
         - name: pulling git repo
@@ -76,7 +76,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [build]
+    needs: [build, build-test]
     environment:
         name: production
     steps:
