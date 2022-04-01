@@ -24,7 +24,7 @@ jobs:
  ## Testing changes
   build-test:
     environment:
-      name: poi-tracker-fastapi
+      name: build
     needs: [build]
     env:
       DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}

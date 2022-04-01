@@ -3,14 +3,14 @@ name: Build-Verify
 on: 
   push:
     branches:
-      - develop
+     # - develop
       - feature/*    
      
 # Comment to test new pipeline
 jobs:
   build:
     environment:
-      name: poi-tracker-fastapi
+      name: build
     runs-on: ubuntu-latest
     steps:
         - name: pulling git repo
@@ -26,7 +26,7 @@ jobs:
 
   build-test:
     environment:
-      name: poi-tracker-fastapi
+      name: build
     needs: [build]
     env:
       DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
