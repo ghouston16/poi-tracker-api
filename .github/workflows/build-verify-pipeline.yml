@@ -29,7 +29,7 @@ jobs:
       name: build
     needs: [build]
     env:
-      DATABASE_HOSTNAME: localhost
+      DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
       DATABASE_PORT: ${{secrets.DATABASE_PORT}}
       DATABASE_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
       DATABASE_NAME: ${{secrets.DATABASE_NAME}}
