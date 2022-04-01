@@ -38,7 +38,7 @@ jobs:
       ALGORITHM: ${{secrets.ALGORITHM}}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
       DATABASE_URL: ${{secrets.DATABASE_URL}}
-
+## Make some change
     services:
       postgres:
         image: postgres
