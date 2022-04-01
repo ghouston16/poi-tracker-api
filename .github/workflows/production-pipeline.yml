@@ -1,9 +1,9 @@
-name: Continuous Integration and Delivery
+name: Build, Test, Deploy - Production
 
 on:
   push:
     branches:
-      - master
+      - release/*
      # - feature/production-pipeline.yml
 
 env:
