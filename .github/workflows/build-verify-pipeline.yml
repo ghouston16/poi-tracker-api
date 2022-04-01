@@ -4,13 +4,13 @@ on:
   push:
     branches:
       - develop
-      - feature/*    
+      - feature/*   
      
 # Comment to test new pipeline
 jobs:
   build:
     environment:
-      name: poi-tracker-fastapi
+      name: build
     runs-on: ubuntu-latest
     steps:
         - name: pulling git repo
@@ -26,7 +26,7 @@ jobs:
 
   build-test:
     environment:
-      name: poi-tracker-fastapi
+      name: build
     needs: [build]
     env:
       DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
@@ -38,7 +38,7 @@ jobs:
       ALGORITHM: ${{secrets.ALGORITHM}}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
       DATABASE_URL: ${{secrets.DATABASE_URL}}
-
+## Make some change
     services:
       postgres:
         image: postgres
@@ -67,7 +67,7 @@ jobs:
         - name: test with pytest
           run: |
             pip install pytest
-            python -m pytest --cov="." --cov-fail-under=80
+            python -m pytest
         - name: Code Linting Check
           run: flake8 . --ignore E711,E302,F541,E712,W291
         - name: code quality check
