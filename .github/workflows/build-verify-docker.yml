@@ -82,13 +82,7 @@ jobs:
           echo --- Completed test cases --- 
       - name: Run Container
         run: |
-         docker run -d --name python-poi-api ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
-#     - name: Testing DB Migrations
-     #   run: docker exec python-poi-api alembic upgrade head
-     # - name: Pytest
-     #   run: docker exec python-poi-api pytest .
-     # - name: Flake8
-         docker exec python-poi-api flake8 . --ignore E711,E302,F541,E712,W291
-     # - name: Black
-         docker exec python-poi-api black . --check
-         docker exec python-poi-api isort . --check-only
+          docker run -d --name python-poi-api ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
+          docker exec python-poi-api flake8 . --ignore E711,E302,F541,E712,W291
+          docker exec python-poi-api black . --check
+          docker exec python-poi-api isort . --check-only
