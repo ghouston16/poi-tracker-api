@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - release/*
-      - develop
-      - feature/*
+     # - develop
+     # - feature/*
 
 env:
   IMAGE: docker.pkg.github.com/ghouston16/poi-tracker-api/python-poi-api
