@@ -3,9 +3,6 @@ name: Build, Test, Deploy - Production
 on:
   push:
     branches:
-     # - release/*
-     # - develop
-     # - feature/*
       -master
 env:
   IMAGE: docker.pkg.github.com/ghouston16/poi-tracker-api/python-poi-api
