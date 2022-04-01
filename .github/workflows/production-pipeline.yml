@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - release/*
-     # - feature/production-pipeline.yml
+      - feature/*
 
 env:
   IMAGE: docker.pkg.github.com/ghouston16/poi-tracker-api/python-poi-api
