@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     environment:
-      name: poi-tracker-fastapi
+      name: build
     runs-on: ubuntu-latest
     steps:
         - name: pulling git repo
