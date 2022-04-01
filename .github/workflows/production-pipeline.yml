@@ -3,7 +3,8 @@ name: Build, Test, Deploy - Production
 on:
   push:
     branches:
-      -master
+        -master
+        
 env:
   IMAGE: docker.pkg.github.com/ghouston16/poi-tracker-api/python-poi-api
   REGISTRY: ghcr.io
