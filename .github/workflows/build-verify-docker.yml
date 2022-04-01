@@ -1,7 +1,7 @@
 name: Build Verify - Container
 
 on:
-  pull:
+  pull_request:
     branches:
       - release
      # - develop
