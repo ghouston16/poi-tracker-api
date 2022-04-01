@@ -1,4 +1,4 @@
-name: Build, Test and Deploy Code - Staging
+name: Build, Test, Deploy - Staging
 
 on: 
   push:
@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     environment:
-      name: poi-tracker-fastapi
+      name: build
     runs-on: ubuntu-latest
     steps:
         - name: pulling git repo
@@ -24,7 +24,7 @@ jobs:
  ## Testing changes
   build-test:
     environment:
-      name: poi-tracker-fastapi
+      name: build
     needs: [build]
     env:
       DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}

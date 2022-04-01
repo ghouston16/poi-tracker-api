@@ -1,10 +1,11 @@
-name: Continuous Integration and Delivery
+name: Build, Test, Deploy - Production
 
 on:
   push:
     branches:
-      - master
-      - feature/production-pipeline.yml
+      - release/*
+      - develop
+      - feature/*
 
 env:
   IMAGE: docker.pkg.github.com/ghouston16/poi-tracker-api/python-poi-api
@@ -16,7 +17,7 @@ jobs:
     name: Build Docker Image
     runs-on: ubuntu-latest
     environment:
-      name: production
+      name: build
     steps:
       - name: Checkout
         uses: actions/checkout@v2.4.0
@@ -46,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: poi-tracker-fastapi
+      name: build
     env:
       DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
       DATABASE_PORT: ${{secrets.DATABASE_PORT}}
