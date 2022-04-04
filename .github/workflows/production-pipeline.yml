@@ -1,9 +1,10 @@
 name: Continuous Integration and Delivery
 
-on:
+on: 
   push:
     branches:
-      	- release
+     - release
+
 env:
   IMAGE: docker.pkg.github.com/ghouston16/poi-tracker-api/python-poi-api
   REGISTRY: ghcr.io
