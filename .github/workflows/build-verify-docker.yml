@@ -3,7 +3,7 @@ name: Build Verify - Container
 on:
   pull_request:
     branches:
-      - release
+      - release/*
      # - develop
      # - feature/*
 
