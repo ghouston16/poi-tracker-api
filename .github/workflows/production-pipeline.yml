@@ -1,9 +1,11 @@
-name: Build, Test, Deploy - Prod
+name: Build, Test, Deploy - Production
 
 on: 
   push:
     branches:
-     - release
+      - release/*
+     # - develop
+     #- feature/*
 
 env:
   IMAGE: docker.pkg.github.com/ghouston16/poi-tracker-api/python-poi-api
@@ -75,16 +77,15 @@ jobs:
           echo --- Running test cases ---
           docker-compose -f docker-compose.yml up --build --exit-code-from api
           echo --- Completed test cases --- 
-      #- name: Run Container
-      #  run: docker run -d --name python-poi-api ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
-      #- name: Flake8
-      #  run: |
-      #      docker exec python-poi-api flake8 . --ignore E711,E302,F541,E712,W291
-
-
-      #      docker exec python-poi-api black . --check
-      #      docker exec python-poi-api isort . --check-only
-      #- name: Black
-      #  run: docker exec python-poi-api black . --check
-      #- name: isort
-      #  run: docker exec python-poi-api isort . --check-only
+      - name: Run Container
+        run: docker run -d --name python-poi-api ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest #-e DATABASE_URL=sqlite://sqlite.db -p 5003:8765 #-e ENVIRONMENT=dev DATABASE_URL=${{secrets.DATABASE_URL}} DATABASE_HOSTNAME=${{secrets.DATABASE_HOSTNAME}} DATABASE_PORT=${{secrets.DATABASE_PORT}} DATABASE_PASSWORD=${{secrets.DATABASE_PASSWORD}} -e DATABASE_NAME= ${{secrets.DATABASE_NAME}} DATABASE_USERNAME= ${{secrets.DATABASE_USERNAME}} SECRET_KEY=${{secrets.SECRET_KEY}} ALGORITHM=${{secrets.ALGORITHM}} ACCESS_TOKEN_EXPIRE_MINUTES=${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}} -p 5432:5432
+     # - name: Testing DB Migrations
+     #   run: docker exec python-poi-api alembic upgrade head
+     # - name: Pytest
+     #   run: docker exec python-poi-api pytest .
+      - name: Flake8
+        run: docker exec python-poi-api flake8 . --ignore E711,E302,F541,E712,W291
+     # - name: Black
+     #   run: docker exec python-poi-api black . --check
+     # - name: isort
+     #   run: docker exec python-poi-api isort . --check-only
