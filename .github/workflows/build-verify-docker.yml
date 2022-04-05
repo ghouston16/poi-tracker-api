@@ -3,9 +3,7 @@ name: Build Verify - Container
 on:
   pull_request:
     branches:
-      - release
-     # - develop
-     # - feature/*
+      - release/*
 
 env:
   IMAGE: docker.pkg.github.com/ghouston16/poi-tracker-api/python-poi-api
@@ -77,17 +75,3 @@ jobs:
           echo --- Running test cases ---
           docker-compose -f docker-compose.yml up --build --exit-code-from api
           echo --- Completed test cases --- 
-    #  - name: Compose Down
-    #    run: docker-compose down
-    #  - name: Run Container
-    #    run: docker run -d --name python-poi-api ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
-     # - name: Flake8
-     #   run: docker exec python-poi-api flake8 . --ignore E711,E302,F541,E712,W291
-     # - name: Run Container
-     #   run: docker run -d --name python-poi-api ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
-     # - name: Black
-     #   run: docker exec python-poi-api black . --check
-     # - name: Run Container
-     #   run: docker run -d --name python-poi-api ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
-     # - name: isort
-     #   run: docker exec python-poi-api isort . --check-only
