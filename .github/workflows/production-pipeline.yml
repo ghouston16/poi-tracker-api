@@ -76,8 +76,8 @@ jobs:
           echo --- Running test cases ---
           docker-compose -f docker-compose.yml up --build --exit-code-from api
           echo --- Completed test cases --- 
-      - name: Run Container
-        run: docker run -d --name python-poi-api ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest #-e DATABASE_URL=sqlite://sqlite.db -p 5003:8765 #-e ENVIRONMENT=dev DATABASE_URL=${{secrets.DATABASE_URL}} DATABASE_HOSTNAME=${{secrets.DATABASE_HOSTNAME}} DATABASE_PORT=${{secrets.DATABASE_PORT}} DATABASE_PASSWORD=${{secrets.DATABASE_PASSWORD}} -e DATABASE_NAME= ${{secrets.DATABASE_NAME}} DATABASE_USERNAME= ${{secrets.DATABASE_USERNAME}} SECRET_KEY=${{secrets.SECRET_KEY}} ALGORITHM=${{secrets.ALGORITHM}} ACCESS_TOKEN_EXPIRE_MINUTES=${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}} -p 5432:5432
+     # - name: Run Container
+     #   run: docker run -d --name python-poi-api ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest #-e DATABASE_URL=sqlite://sqlite.db -p 5003:8765 #-e ENVIRONMENT=dev DATABASE_URL=${{secrets.DATABASE_URL}} DATABASE_HOSTNAME=${{secrets.DATABASE_HOSTNAME}} DATABASE_PORT=${{secrets.DATABASE_PORT}} DATABASE_PASSWORD=${{secrets.DATABASE_PASSWORD}} -e DATABASE_NAME= ${{secrets.DATABASE_NAME}} DATABASE_USERNAME= ${{secrets.DATABASE_USERNAME}} SECRET_KEY=${{secrets.SECRET_KEY}} ALGORITHM=${{secrets.ALGORITHM}} ACCESS_TOKEN_EXPIRE_MINUTES=${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}} -p 5432:5432
      # - name: Testing DB Migrations
      #   run: docker exec python-poi-api alembic upgrade head
      # - name: Pytest
@@ -118,11 +118,6 @@ jobs:
         run: docker tag ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest registry.heroku.com/${{secrets.HEROKU_APP_NAME}}/web
       - name: Push to the registry
         run: docker push ${{ env.HEROKU_REGISTRY_IMAGE }}
-      #- name: Set environment variables
-      #  run: |
-      #    echo "HEROKU_REGISTRY_IMAGE=${{ env.HEROKU_REGISTRY_IMAGE }}" >> $GITHUB_ENV
-      #    echo "HEROKU_AUTH_TOKEN=${{ secrets.HEROKU_AUTH_TOKEN }}" >> $GITHUB_ENV
       - name: Release
         run: |
-          chmod +x ./release.sh
-          ./release.sh
+          heroku container:release web
