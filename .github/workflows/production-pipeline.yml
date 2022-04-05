@@ -89,6 +89,7 @@ jobs:
      #   run: docker exec python-poi-api black . --check
      # - name: isort
      #   run: docker exec python-poi-api isort . --check-only
+       - name: docker push 
 
   deploy:
     name: Deploy to Heroku
@@ -97,7 +98,7 @@ jobs:
     environment: production
     env:
       HEROKU_APP_NAME: ${{secrets.HEROKU_APP_NAME}}
-      HEROKU_REGISTRY_IMAGE: registry.heroku.com/${HEROKU_APP_NAME}
+      HEROKU_REGISTRY_IMAGE: registry.heroku.com/${HEROKU_APP_NAME}/web
     steps:
       - name: Checkout
         uses: actions/checkout@v2.4.0
@@ -115,12 +116,14 @@ jobs:
         run: docker login -u _ -p ${HEROKU_API_KEY} registry.heroku.com
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      - name: Tag image 
+        run: docker tag ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest registry.heroku.com/${{HEROKU_APP_NAME}}/web
       - name: Push to the registry
         run: docker push ${{ env.HEROKU_REGISTRY_IMAGE }}
-      - name: Set environment variables
-        run: |
-          echo "HEROKU_REGISTRY_IMAGE=${{ env.HEROKU_REGISTRY_IMAGE }}" >> $GITHUB_ENV
-          echo "HEROKU_AUTH_TOKEN=${{ secrets.HEROKU_AUTH_TOKEN }}" >> $GITHUB_ENV
+      #- name: Set environment variables
+      #  run: |
+      #    echo "HEROKU_REGISTRY_IMAGE=${{ env.HEROKU_REGISTRY_IMAGE }}" >> $GITHUB_ENV
+      #    echo "HEROKU_AUTH_TOKEN=${{ secrets.HEROKU_AUTH_TOKEN }}" >> $GITHUB_ENV
       - name: Release
         run: |
           chmod +x ./release.sh
