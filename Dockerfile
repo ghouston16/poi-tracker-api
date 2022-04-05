@@ -22,8 +22,7 @@ ENV TESTING 0
 # install python dependencies
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
-RUN apt-get update \
-    && pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install "uvicorn[standard]==0.16.0"
 
 # add app
