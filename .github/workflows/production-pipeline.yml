@@ -120,4 +120,4 @@ jobs:
         run: docker push ${{ env.HEROKU_REGISTRY_IMAGE }}
       - name: Release
         run: |
-          heroku container:release web
+          heroku container:release web --app python-poi-api
