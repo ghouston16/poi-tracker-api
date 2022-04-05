@@ -101,14 +101,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2.4.0
-      - name: Log in to GitHub Packages
-        run: echo ${GH_TOKEN} | docker login -u ${GH_ACTOR} --password-stdin docker.pkg.github.com
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.GH_ACTOR }}
+          password: ${{ secrets.GH_TOKEN }}
       - name: Pull image
-        run: |
-          docker pull ${{env.REGISTRY}}/${{ env.IMAGE }}:latest || true
-      - name: Build image
+        run: docker pull ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
+      - name: Build Image
         run: docker build . -f Dockerfile.prod --tag  ${{ env.IMAGE }}:latest
       - name: Log in to the Heroku Container Registry
         run: docker login -u _ -p ${HEROKU_API_KEY} registry.heroku.com
