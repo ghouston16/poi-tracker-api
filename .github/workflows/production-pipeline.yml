@@ -58,7 +58,6 @@ jobs:
       ALGORITHM: ${{secrets.ALGORITHM}}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
       DATABASE_URL: ${{secrets.DATABASE_URL}}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2.4.0
@@ -88,8 +87,7 @@ jobs:
      # - name: Black
      #   run: docker exec python-poi-api black . --check
      # - name: isort
-     #   run: docker exec python-poi-api isort . --check-only
-       - name: docker push 
+     #   run: docker exec python-poi-api isort . --check-only 
 
   deploy:
     name: Deploy to Heroku
