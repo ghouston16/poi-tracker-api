@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - release/*
-      - develop
-      - feature/*
+     # - develop
+     #- feature/*
 
 env:
   IMAGE: docker.pkg.github.com/ghouston16/poi-tracker-api/python-poi-api
@@ -85,7 +85,7 @@ jobs:
      #   run: docker exec python-poi-api pytest .
       - name: Flake8
         run: docker exec python-poi-api flake8 . --ignore E711,E302,F541,E712,W291
-      - name: Black
-        run: docker exec python-poi-api black . --check
-      - name: isort
-        run: docker exec python-poi-api isort . --check-only
+     # - name: Black
+     #   run: docker exec python-poi-api black . --check
+     # - name: isort
+     #   run: docker exec python-poi-api isort . --check-only
