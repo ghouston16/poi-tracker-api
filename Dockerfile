@@ -1,15 +1,11 @@
-# pull official base image
-FROM python:3.10.1-slim-buster
+FROM python:3.9.7
 
-# create directory for the app user
-RUN mkdir -p /home/app
+WORKDIR /usr/src/app
 
 # create the app user
 RUN addgroup --system app && adduser --system --group app
 
-# create the appropriate directories
-ENV HOME=/home/app
-ENV APP_HOME=/home/app/web
+ENV APP_HOME=/usr/src/app/web
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
@@ -19,13 +15,10 @@ ENV PYTHONUNBUFFERED 1
 ENV ENVIRONMENT prod
 ENV TESTING 0
 
-# install python dependencies
-RUN pip install --upgrade pip
-COPY ./requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install "uvicorn[standard]==0.16.0"
+COPY requirements.txt ./
 
-# add app
+RUN pip install --no-cache-dir -r requirements.txt
+
 COPY . .
 
 # chown all the files to the app user
