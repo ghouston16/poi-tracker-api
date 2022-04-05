@@ -1,15 +1,12 @@
 # pull official base image
 FROM python:3.10.1-slim-buster
 
-# create directory for the app user
-RUN mkdir -p /home/app
+WORKDIR /usr/src/app
 
 # create the app user
 RUN addgroup --system app && adduser --system --group app
 
-# create the appropriate directories
-ENV HOME=/home/app
-ENV APP_HOME=/home/app/web
+ENV APP_HOME=/usr/src/app/web
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
@@ -28,8 +25,6 @@ RUN apt-get update \
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
 RUN apt-get update \
-    && apt-get -y install libpq-dev gcc \
-    && pip install psycopg2 \
     && pip install --no-cache-dir -r requirements.txt
 RUN pip install "uvicorn[standard]==0.16.0"
 
