@@ -124,4 +124,4 @@ jobs:
       #    echo "HEROKU_AUTH_TOKEN=${{ secrets.HEROKU_AUTH_TOKEN }}" >> $GITHUB_ENV
       - name: Release
         run: |
-          heroku ${{ env.HEROKU_REGISTRY_IMAGE }}:release web
+          heroku container:release web --app python-poi-api
