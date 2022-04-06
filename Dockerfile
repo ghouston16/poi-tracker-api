@@ -28,4 +28,4 @@ RUN chown -R app:app $APP_HOME
 USER app
 
 # run gunicorn
-CMD gunicorn --bind 0.0.0.0:$PORT app.main:app -w 4 -k uvicorn.workers.UvicornWorker
+CMD release.sh
