@@ -76,6 +76,13 @@ jobs:
           echo --- Running test cases ---
           docker-compose -f docker-compose.yml up --build --exit-code-from api
           echo --- Completed test cases --- 
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: .
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
+          labels: ${{ steps.meta.outputs.labels }}
 
   deploy:
     name: Deploy to Heroku
