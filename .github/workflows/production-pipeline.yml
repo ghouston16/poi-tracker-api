@@ -17,7 +17,7 @@ jobs:
     name: Build Docker Image
     runs-on: ubuntu-latest
     environment:
-      name: build
+      name: production
     steps:
       - name: Checkout
         uses: actions/checkout@v2.4.0
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: build
+      name: production
     env:
       DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
       DATABASE_PORT: ${{secrets.DATABASE_PORT}}
