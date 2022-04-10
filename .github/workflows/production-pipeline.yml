@@ -82,38 +82,42 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build, test]
     environment: production
-    env:
-      HEROKU_APP_NAME: ${{secrets.HEROKU_APP_NAME}}
-      HEROKU_REGISTRY_IMAGE: registry.heroku.com/${HEROKU_APP_NAME}/web
-      DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
-      DATABASE_PORT: ${{secrets.DATABASE_PORT}}
-      DATABASE_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
-      DATABASE_NAME: ${{secrets.DATABASE_NAME}}
-      DATABASE_USERNAME: ${{secrets.DATABASE_USERNAME}}
-      SECRET_KEY: ${{secrets.SECRET_KEY}}
-      ALGORITHM: ${{secrets.ALGORITHM}}
-      ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
-      DATABASE_URL: ${{secrets.DATABASE_URL}}
     steps:
       - name: Checkout
         uses: actions/checkout@v2.4.0
-      - name: Log in to the Container registry
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+      - name: Build, Push and Release a Docker container to Heroku. # Your custom step name
+        uses: gonuit/heroku-docker-deploy@v1.3.3 # GitHub action name (leave it as it is).
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ secrets.GH_ACTOR }}
-          password: ${{ secrets.GH_TOKEN }}
-      - name: Build image
-        run: |
-          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
-          docker build . -f Dockerfile --tag  ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
-      - name: Log in to the Heroku Container Registry
-        run: docker login -u _ -p ${HEROKU_API_KEY} registry.heroku.com
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      - name: Tag image 
-        run: docker tag ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest registry.heroku.com/${{secrets.HEROKU_APP_NAME}}/web
-      - name: Push to the registry
-        run: docker push ${{ env.HEROKU_REGISTRY_IMAGE }}
-      - name: Release
-        run: heroku container:release web --app python-poi-api
+          # Below you must provide variables for your Heroku app.
+
+          # The email address associated with your Heroku account.
+          # If you don't want to use repository secrets (which is recommended) you can do:
+          # email: my.email@example.com
+          email: ${{ secrets.HEROKU_EMAIL }}
+          
+          # Heroku API key associated with provided user's email.
+          # Api Key is available under your Heroku account settings.
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          
+          # Name of the heroku application to which the build is to be sent.
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+
+          # (Optional, default: "./")
+          # Dockerfile directory.
+          # For example, if you have a Dockerfile in the root of your project, leave it as follows:
+          dockerfile_directory: ./
+
+          # (Optional, default: "Dockerfile")
+          # Dockerfile name.
+          dockerfile_name: Dockerfile
+
+          # (Optional, default: "")
+          # Additional options of docker build command.
+          docker_options: "--no-cache"
+
+          # (Optional, default: "web")
+          # Select the process type for which you want the docker container to be uploaded.
+          # By default, this argument is set to "web".
+          # For more information look at https://devcenter.heroku.com/articles/process-model
+          process_type: web
+          
