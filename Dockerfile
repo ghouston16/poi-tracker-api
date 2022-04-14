@@ -19,6 +19,8 @@ COPY requirements.txt ./
 
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN alembic upgrade head
+
 COPY . .
 
 # chown all the files to the app user
