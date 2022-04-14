@@ -87,7 +87,7 @@ def update_user(
     updated_user.password = hashed_pwd
     find_user.update(updated_user.dict(), synchronize_session=False)
     db.commit()
-    return find_user.first()
+    return Response(status_code=status.HTTP_201_CREATED)
 
 
 # Delete user - Find by Id and Delete
