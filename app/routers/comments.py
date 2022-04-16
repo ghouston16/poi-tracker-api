@@ -13,7 +13,7 @@ router = APIRouter()
 
 router = APIRouter(prefix="/pois", tags=["Comments"])
 
-
+# Get all comments from the database
 @router.get(
     "/comments/{id}", status_code=status.HTTP_200_OK, response_model=schemas.CommentOut
 )
@@ -69,7 +69,7 @@ def get_poi_comments(
     print(all_poi_comments)
     return all_poi_comments
 
-
+# update comment
 @router.put(
     "/{poi_id}/comments/{id}",
     status_code=status.HTTP_201_CREATED,

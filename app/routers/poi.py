@@ -13,7 +13,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 router = APIRouter()
 
 router = APIRouter(prefix="/pois", tags=["POIs"])
-# I am making a change
+# Get all pois from the database
 @router.get("", status_code=status.HTTP_200_OK, response_model=List[schemas.Poi])
 def get_pois(
     db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)
@@ -22,7 +22,7 @@ def get_pois(
     # print(all_pois)
     return all_pois
 
-
+# Create a new poi route
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=schemas.Poi)
 def create_pois(
     poi: schemas.PoiCreate,
@@ -36,7 +36,7 @@ def create_pois(
     db.refresh(new_poi)
     return new_poi
 
-
+# Get likes by poi id
 @router.get(
     "/{id}/likes", status_code=status.HTTP_200_OK, response_model=schemas.PoiOut
 )
@@ -57,14 +57,9 @@ def get_poi_likes(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"poi with id: {id} was not found",
         )
-
-    #    if poi.creator != current_user.id:
-    #                    raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
-    #                                detail=f"Not authorized")
-
     return poi
 
-
+# Get a poi by id
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.Poi)
 def get_poi(
     id: int,
@@ -77,14 +72,9 @@ def get_poi(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"poi with id: {id} was not found",
         )
-    """
-        if poi.creator != current_user.id:
-                        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
-                                    detail=f"Not authorized")
-    """
     return poi
 
-
+# Delete a poi by id
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_poi(
     id: int,
@@ -108,7 +98,7 @@ def delete_poi(
         db.commit()
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-
+# Update a poi by id
 @router.put("/{id}", status_code=status.HTTP_201_CREATED, response_model=schemas.Poi)
 def update_poi(
     id: int,

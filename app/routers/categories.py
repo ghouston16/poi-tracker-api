@@ -12,7 +12,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 router = APIRouter()
 
 router = APIRouter(prefix="/categories", tags=["Categories"])
-# I am making a change
+# Get all categories from the database
 @router.get(
     "", status_code=status.HTTP_200_OK, response_model=List[schemas.CategoryOut]
 )
@@ -23,7 +23,7 @@ def get_categories(
     # print(all_categorys)
     return all_categories
 
-
+# Create a new category route
 @router.post(
     "", status_code=status.HTTP_201_CREATED, response_model=schemas.CategoryOut
 )
@@ -39,7 +39,7 @@ def create_category(
     db.refresh(new_category)
     return new_category
 
-
+# Get a category pois by category id
 @router.get(
     "/{id}/pois", status_code=status.HTTP_200_OK, response_model=List[schemas.Poi]
 )
@@ -56,7 +56,7 @@ def get_category_pois(
         )
     return pois
 
-
+# Get a category by id
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.CategoryOut)
 def get_category(
     id: int,
@@ -71,7 +71,7 @@ def get_category(
         )
     return category
 
-
+# Delete a category by id
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_category(
     id: int,
@@ -95,7 +95,7 @@ def delete_category(
         db.commit()
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-
+# Update a category by id
 @router.put(
     "/{id}", status_code=status.HTTP_201_CREATED, response_model=schemas.CategoryOut
 )

@@ -42,7 +42,7 @@ class CategoryOut(Category):
         orm_mode = True
 
 
-# Poi Model
+# Poi Base Model
 class PoiBase(BaseModel):
     title: str
     description: str
@@ -55,7 +55,6 @@ class PoiBase(BaseModel):
 
 class PoiCreate(PoiBase):
     pass
-
 
 # Response Model
 class Poi(PoiBase):
@@ -83,7 +82,7 @@ class Like(BaseModel):
     poi_id: int
     dir: conint(le=1)
 
-
+# Response Model - include likes
 class PoiOut(BaseModel):
     Poi: Poi
     likes: int
@@ -91,14 +90,15 @@ class PoiOut(BaseModel):
     class Config:
         orm_mode = True
 
-
+# Comment Model Base
 class Comment(BaseModel):
     comment: str
     published: bool = True
     poi_id: int
     creator: int
 
-
+# Response Model - Comment and Poi passed through 
+# includes owner
 class CommentOut(Comment):
     id: int
     created_at: datetime
