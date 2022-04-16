@@ -1,8 +1,10 @@
 from datetime import datetime, timedelta
+
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
+
 from . import database, models, schemas
 from .config import settings
 
@@ -25,6 +27,7 @@ def create_access_token(data: dict):
 
     return encoded_jwt
 
+
 # Method to verify access token
 def verify_access_token(token: str, credentials_exception):
 
@@ -38,6 +41,7 @@ def verify_access_token(token: str, credentials_exception):
         raise credentials_exception
 
     return token_data
+
 
 # Get user by token
 # Used to authneticate user actions

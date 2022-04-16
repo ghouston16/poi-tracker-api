@@ -35,9 +35,3 @@ def test_like_poi_non_exist(client_auth, test_pois):
     assert res.status_code == 404
 
 
-# Error in test - Postman returns correct code when manually tested
-# Auth working correctly
-# def test_like_no_auth(client, test_pois):
-#    res = client.post(
-#        "/like/", json={"poi_id": test_pois[1]['id'], "dir": 1})
-#    assert res.status_code == 401

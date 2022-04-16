@@ -23,6 +23,7 @@ def get_categories(
     # print(all_categorys)
     return all_categories
 
+
 # Create a new category route
 @router.post(
     "", status_code=status.HTTP_201_CREATED, response_model=schemas.CategoryOut
@@ -38,6 +39,7 @@ def create_category(
     db.commit()
     db.refresh(new_category)
     return new_category
+
 
 # Get a category pois by category id
 @router.get(
@@ -56,6 +58,7 @@ def get_category_pois(
         )
     return pois
 
+
 # Get a category by id
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.CategoryOut)
 def get_category(
@@ -70,6 +73,7 @@ def get_category(
             detail=f"category with id: {id} was not found",
         )
     return category
+
 
 # Delete a category by id
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -94,6 +98,7 @@ def delete_category(
         find_category.delete(synchronize_session=False)
         db.commit()
         return Response(status_code=status.HTTP_204_NO_CONTENT)
+
 
 # Update a category by id
 @router.put(

@@ -9,7 +9,7 @@ from .routers import authenticate, categories, comments, likes, poi, user
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # Create Api instance
-app = FastAPI() 
+app = FastAPI()
 
 # Obselete with Alembic Migrations
 # models.Base.metadata.create_all(bind=engine)

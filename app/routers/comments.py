@@ -69,6 +69,7 @@ def get_poi_comments(
     print(all_poi_comments)
     return all_poi_comments
 
+
 # update comment
 @router.put(
     "/{poi_id}/comments/{id}",

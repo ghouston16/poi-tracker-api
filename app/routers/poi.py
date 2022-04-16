@@ -22,6 +22,7 @@ def get_pois(
     # print(all_pois)
     return all_pois
 
+
 # Create a new poi route
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=schemas.Poi)
 def create_pois(
@@ -35,6 +36,7 @@ def create_pois(
     db.commit()
     db.refresh(new_poi)
     return new_poi
+
 
 # Get likes by poi id
 @router.get(
@@ -59,6 +61,7 @@ def get_poi_likes(
         )
     return poi
 
+
 # Get a poi by id
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.Poi)
 def get_poi(
@@ -73,6 +76,7 @@ def get_poi(
             detail=f"poi with id: {id} was not found",
         )
     return poi
+
 
 # Delete a poi by id
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -97,6 +101,7 @@ def delete_poi(
         find_poi.delete(synchronize_session=False)
         db.commit()
         return Response(status_code=status.HTTP_204_NO_CONTENT)
+
 
 # Update a poi by id
 @router.put("/{id}", status_code=status.HTTP_201_CREATED, response_model=schemas.Poi)

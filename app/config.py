@@ -1,5 +1,6 @@
 from pydantic import BaseSettings
 
+
 # Define the settings class
 # Use pydantic to validate the settings
 # https://pydantic-docs.helpmanual.io/usage/settings/
