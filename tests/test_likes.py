@@ -33,4 +33,3 @@ def test_delete_like_non_exist(client_auth, test_pois):
 def test_like_poi_non_exist(client_auth, test_pois):
     res = client_auth.post("/like/", json={"poi_id": 80000, "dir": 1})
     assert res.status_code == 404
-    
