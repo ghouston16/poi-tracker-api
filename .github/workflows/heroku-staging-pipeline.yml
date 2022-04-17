@@ -67,7 +67,7 @@ jobs:
             pip install pytest
             python -m pytest --cov="." --cov-fail-under=80
         - name: Flake8
-          run: flake8 . --ignore E711,E302,F541,E712,W291
+          run: flake8 . --ignore E711,E302,F541,E712,W291,E261
         - name: Black - code quality check
           run: black . --check
         - name: Isort check
