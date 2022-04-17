@@ -7,7 +7,7 @@ from .. import models, oauth2, schemas
 
 router = APIRouter(prefix="/like", tags=["Like"])
 
-
+# Like a post
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def like(
     like: schemas.Like,
@@ -23,6 +23,7 @@ def like(
     like_query = db.query(models.Like).filter(
         models.Like.poi_id == like.poi_id, models.Like.user_id == current_user.id
     )
+    # Cannot like same post twice
     found_like = like_query.first()
     if like.dir == 1:
         if found_like:

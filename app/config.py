@@ -1,6 +1,10 @@
 from pydantic import BaseSettings
 
 
+# Define the settings class
+# Use pydantic to validate the settings
+# https://pydantic-docs.helpmanual.io/usage/settings/
+# Represents the settings for the application
 class Settings(BaseSettings):
     database_hostname: str
     database_port: str

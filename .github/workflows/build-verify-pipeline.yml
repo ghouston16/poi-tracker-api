@@ -69,7 +69,7 @@ jobs:
             pip install pytest
             python -m pytest
         - name: Code Linting Check
-          run: flake8 . --ignore E711,E302,F541,E712,W291
+          run: flake8 . --ignore E711,E302,F541,E712,W291,E261
         - name: code quality check
           run: black . --check
         - name: dependency sort check

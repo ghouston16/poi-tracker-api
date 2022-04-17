@@ -39,7 +39,7 @@ jobs:
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
           labels: ${{ steps.meta.outputs.labels }}
-  # https://testdriven.io/courses/tdd-fastapi/continuous-integration/ 
+  
   test:
     name: Test Docker Image
     runs-on: ubuntu-latest
@@ -69,7 +69,7 @@ jobs:
         run: |
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
           docker build . -f Dockerfile --tag  ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
-      - name: Run Pytest with Compose
+      - name: Run Pytest with Compose 
         run: |
           echo --- Running test cases ---
           docker-compose -f docker-compose.yml up --build --exit-code-from api
@@ -80,52 +80,28 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build, test]
     environment: production
-    env:
-      DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
-      DATABASE_PORT: ${{secrets.DATABASE_PORT}}
-      DATABASE_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
-      DATABASE_NAME: ${{secrets.DATABASE_NAME}}
-      DATABASE_USERNAME: ${{secrets.DATABASE_USERNAME}}
-      SECRET_KEY: ${{secrets.SECRET_KEY}}
-      ALGORITHM: ${{secrets.ALGORITHM}}
-      ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
-      DATABASE_URL: ${{secrets.DATABASE_URL}}
     steps:
       - name: Checkout
         uses: actions/checkout@v2.4.0
       - name: Build, Push and Release a Docker container to Heroku. # Your custom step name
         uses: gonuit/heroku-docker-deploy@v1.3.3 # GitHub action name (leave it as it is).
         with:
-          # Below you must provide variables for your Heroku app.
-
-          # The email address associated with your Heroku account.
-          # If you don't want to use repository secrets (which is recommended) you can do:
           # email: my.email@example.com
           email: ${{ secrets.HEROKU_EMAIL }}
-          
           # Heroku API key associated with provided user's email.
-          # Api Key is available under your Heroku account settings.
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          
           # Name of the heroku application to which the build is to be sent.
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-
           # (Optional, default: "./")
           # Dockerfile directory.
           # For example, if you have a Dockerfile in the root of your project, leave it as follows:
           dockerfile_directory: ./
-
-          # (Optional, default: "Dockerfile")
           # Dockerfile name.
           dockerfile_name: Dockerfile
-
           # (Optional, default: "")
           # Additional options of docker build command.
           docker_options: "--no-cache"
-
           # (Optional, default: "web")
-          # Select the process type for which you want the docker container to be uploaded.
-          # By default, this argument is set to "web".
           # For more information look at https://devcenter.heroku.com/articles/process-model
           process_type: web
 
