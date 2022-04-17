@@ -1,0 +1,97 @@
+<html>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+      <div class="mermaid">
+    
+        classDiagram
+          class Category {
+            creator : int
+            name : str
+          }
+          class CategoryOut {
+            created_at : datetime
+            id : int
+          }
+          class Comment {
+            comment : str
+            creator : int
+            poi_id : int
+            published : bool
+          }
+          class CommentOut {
+            created_at : datetime
+            id : int
+            owner
+            parent
+          }
+          class Config {
+            orm_mode : bool
+          }
+          class Config {
+            orm_mode : bool
+          }
+          class Config {
+            orm_mode : bool
+          }
+          class Config {
+            orm_mode : bool
+          }
+          class Config {
+            orm_mode : bool
+          }
+          class Like {
+            dir
+            poi_id : int
+          }
+          class Poi {
+            created_at : datetime
+            id : int
+            owner
+          }
+          class PoiBase {
+            category : Optional[int]
+            creator : int
+            description : str
+            lat : str
+            lng : str
+            published : bool
+            title : str
+          }
+          class PoiCreate {
+          }
+          class PoiOut {
+            Poi
+            likes : int
+          }
+          class Token {
+            access_token : str
+            token_type : str
+          }
+          class TokenData {
+            id : Optional[str]
+          }
+          class UserCreate {
+            email
+            password : str
+          }
+          class UserLogin {
+            email
+            password : str
+          }
+          class UserOut {
+            created_at : datetime
+            email
+            id : int
+          }
+          CategoryOut --|> Category
+          CommentOut --|> Comment
+          Poi --|> PoiBase
+          PoiCreate --|> PoiBase
+          Poi --* CommentOut : parent
+          Poi --* PoiOut : Poi
+          UserOut --* CommentOut : owner
+          UserOut --* Poi : owner
+  
+       </div>
+  </body>
+</html>

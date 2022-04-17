@@ -8,9 +8,10 @@ from .routers import authenticate, categories, comments, likes, poi, user
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+# Create Api instance
 app = FastAPI()
 
-# Obselete with Alembic
+# Obselete with Alembic Migrations
 # models.Base.metadata.create_all(bind=engine)
 
 # Change this to Web App URL

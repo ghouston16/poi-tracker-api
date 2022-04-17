@@ -6,9 +6,10 @@ from app import models, oauth2, utils
 
 from .. import database, schemas
 
+# Create a router
 router = APIRouter(tags=["Authenication"])
 
-
+# User Login
 @router.post("/login", response_model=schemas.Token)
 def login(
     user_credentials: OAuth2PasswordRequestForm = Depends(),
