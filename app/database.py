@@ -22,3 +22,4 @@ def get_db():
     finally:
         # Close the session
         db.close()
+        
