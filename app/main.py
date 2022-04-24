@@ -42,4 +42,4 @@ def test_pois(db: Session = Depends(get_db)):
 
 @app.get("/")
 def root():
-    return {"message": "Welcome to my Python API"}
+    return {"message": "Welcome to my Python API - demo changes"}
